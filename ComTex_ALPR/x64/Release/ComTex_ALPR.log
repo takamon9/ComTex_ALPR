@@ -1,0 +1,45 @@
+﻿2017/02/17 13:35:20 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "C:\Users\T410_A\documents\visual studio 2013\Projects\ComTex_ALPR\ComTex_ALPR\ComTex_ALPR.vcxproj" (Build ターゲット)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\\" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\Facades\\" /Zi /clr /nologo /W3 /WX- /O2 /D WIN32 /D NDEBUG /D _UNICODE /D UNICODE /EHa /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Drawing.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Windows.Forms.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Xml.dll" /errorReport:prompt /clr:nostdlib Comtex.cpp
+         Comtex.cpp
+     1>C:\opencv\build\include\opencv2/core/mat.hpp(1965): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+     1>C:\opencv\build\include\opencv2/core/persistence.hpp : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+     1>C:\opencv\build\include\opencv2/core/utility.hpp : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+     1>c:\users\t410_a\documents\visual studio 2013\projects\comtex_alpr\comtex_alpr\preFunction.h(60): warning C4101: 't' : ローカル変数は 1 度も使われていません。
+     1>c:\users\t410_a\documents\visual studio 2013\projects\comtex_alpr\comtex_alpr\preFunction.h(78): warning C4267: '引数' : 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+     1>c:\users\t410_a\documents\visual studio 2013\projects\comtex_alpr\comtex_alpr\preFunction.h(79): warning C4244: '引数' : 'int' から 'float' への変換です。データが失われる可能性があります。
+     1>c:\users\t410_a\documents\visual studio 2013\projects\comtex_alpr\comtex_alpr\Comtex.h(260): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\time.inl(112) : 'localtime' の宣言を確認してください。
+     1>c:\opencv\build\include\opencv2\core\cvstd.hpp(599): warning C4793: cv::String::String': ネイティブ関数としてコンパイルされました:
+         	マネージ コードでサポートされていない組み込み型が見つかりました
+     1>c:\users\t410_a\documents\visual studio 2013\projects\comtex_alpr\comtex_alpr\prefunction.h(46): warning C4715: 'accessCascade' : 値を返さないコントロール パスがあります。
+     1>c:\opencv\build\include\opencv2\core\mat.inl.hpp(392): warning C4793: cv::Mat::Mat': ネイティブ関数としてコンパイルされました:
+         	マネージ コードでサポートされていない組み込み型が見つかりました
+     1>c:\users\t410_a\documents\visual studio 2013\projects\comtex_alpr\comtex_alpr\prefunction.h(26): warning C4715: 'loadNueron' : 値を返さないコントロール パスがあります。
+     1>c:\users\t410_a\documents\visual studio 2013\projects\comtex_alpr\comtex_alpr\prefunction.h(70): warning C4715: 'readOriginal' : 値を返さないコントロール パスがあります。
+     1>c:\users\t410_a\documents\visual studio 2013\projects\comtex_alpr\comtex_alpr\prefunction.h(36): warning C4715: 'accessIpCamera' : 値を返さないコントロール パスがあります。
+     1>c:\opencv\build\include\opencv2\core\mat.inl.hpp(681): warning C4793: cv::Mat::release': ネイティブ関数としてコンパイルされました:
+         	マネージ コードでサポートされていない組み込み型が見つかりました
+     1>c:\opencv\build\include\opencv2\core\mat.inl.hpp(1872): warning C4793: cv::SparseMat::addref': ネイティブ関数としてコンパイルされました:
+         	マネージ コードでサポートされていない組み込み型が見つかりました
+     1>c:\opencv\build\include\opencv2\core\mat.inl.hpp(3473): warning C4793: cv::UMat::addref': ネイティブ関数としてコンパイルされました:
+         	マネージ コードでサポートされていない組み込み型が見つかりました
+     1>c:\opencv\build\include\opencv2\core\mat.inl.hpp(580): warning C4793: cv::Mat::operator=': ネイティブ関数としてコンパイルされました:
+         	マネージ コードでサポートされていない組み込み型が見つかりました
+     1>c:\opencv\build\include\opencv2\core\mat.inl.hpp(681): warning C4793: cv::Mat::release': ネイティブ関数としてコンパイルされました:
+         	マネージ コードでサポートされていない組み込み型が見つかりました
+     1>c:\opencv\build\include\opencv2\core\ptr.inl.hpp(67): warning C4793: cv::detail::PtrOwner::incRef': ネイティブ関数としてコンパイルされました:
+         	マネージ コードでサポートされていない組み込み型が見つかりました
+     1>c:\opencv\build\include\opencv2\core\ptr.inl.hpp(72): warning C4793: cv::detail::PtrOwner::decRef': ネイティブ関数としてコンパイルされました:
+         	マネージ コードでサポートされていない組み込み型が見つかりました
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\T410_A\documents\visual studio 2013\Projects\ComTex_ALPR\x64\Release\ComTex_ALPR.exe" /INCREMENTAL:NO /NOLOGO opencv_world310.lib /ASSEMBLYRESOURCE:x64\Release\ComTex_ALPR.Comtex.resources /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\T410_A\documents\visual studio 2013\Projects\ComTex_ALPR\x64\Release\ComTex_ALPR.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X64 x64\Release\Comtex.obj
+         "x64\Release\.NETFramework,Version=v4.5.AssemblyAttributes.obj"
+     1>Comtex.obj : warning LNK4248: 未解決の typeref トークン (01000025) ('CvFileStorage') です。イメージを実行できません。
+         ComTex_ALPR.vcxproj -> C:\Users\T410_A\documents\visual studio 2013\Projects\ComTex_ALPR\x64\Release\ComTex_ALPR.exe
+     1>プロジェクト "C:\Users\T410_A\documents\visual studio 2013\Projects\ComTex_ALPR\ComTex_ALPR\ComTex_ALPR.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:06.44
