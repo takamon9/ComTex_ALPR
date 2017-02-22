@@ -9,11 +9,12 @@ namespace ComTex_ALPR {
 	using namespace System::Collections;
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
+	using namespace System::Text;
 	using namespace System::Drawing;
 	using namespace System::Threading;
 
 	/// <summary>
-	/// Comtex ‚ÌŠT—v
+	/// Comtex ã®æ¦‚è¦
 	/// </summary>
 	public ref class Comtex : public System::Windows::Forms::Form
 	{
@@ -22,13 +23,13 @@ namespace ComTex_ALPR {
 		{
 			InitializeComponent();
 			//
-			//TODO: ‚±‚±‚ÉƒRƒ“ƒXƒgƒ‰ƒNƒ^[ ƒR[ƒh‚ğ’Ç‰Á‚µ‚Ü‚·
+			//TODO: ã“ã“ã«ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãƒ¼ ã‚³ãƒ¼ãƒ‰ã‚’è¿½åŠ ã—ã¾ã™
 			//
 		}
 
 	protected:
 		/// <summary>
-		/// g—p’†‚ÌƒŠƒ\[ƒX‚ğ‚·‚×‚ÄƒNƒŠ[ƒ“ƒAƒbƒv‚µ‚Ü‚·B
+		/// ä½¿ç”¨ä¸­ã®ãƒªã‚½ãƒ¼ã‚¹ã‚’ã™ã¹ã¦ã‚¯ãƒªãƒ¼ãƒ³ã‚¢ãƒƒãƒ—ã—ã¾ã™ã€‚
 		/// </summary>
 		~Comtex()
 		{
@@ -39,16 +40,16 @@ namespace ComTex_ALPR {
 		}
 	private: System::Windows::Forms::Button^  startButton1;
 	private: System::Windows::Forms::Button^  stopButton1;
+	private: System::Windows::Forms::Button^  ipSetting;
+	private: TextBox^ ipAddress;
+	private: TextBox^ userName;
+	private: TextBox^ password;
 	protected:
 
 	protected:
 
 	private: System::Windows::Forms::PictureBox^  pictureBox1;
 	private: System::Windows::Forms::DataGridView^  dataGridView1;
-
-
-
-
 	private: System::Windows::Forms::PictureBox^  pictureBox2;
 	private: System::Windows::Forms::PictureBox^  pictureBox3;
 	private: System::Windows::Forms::RadioButton^  radioButton1;
@@ -56,20 +57,24 @@ namespace ComTex_ALPR {
 
 	private:
 		/// <summary>
-		/// •K—v‚ÈƒfƒUƒCƒi[•Ï”‚Å‚·B
+		/// å¿…è¦ãªãƒ‡ã‚¶ã‚¤ãƒŠãƒ¼å¤‰æ•°ã§ã™ã€‚
 		/// </summary>
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
-		/// ƒfƒUƒCƒi[ ƒTƒ|[ƒg‚É•K—v‚Èƒƒ\ƒbƒh‚Å‚·B‚±‚Ìƒƒ\ƒbƒh‚Ì“à—e‚ğ
-		/// ƒR[ƒh ƒGƒfƒBƒ^[‚Å•ÏX‚µ‚È‚¢‚Å‚­‚¾‚³‚¢B
+		/// ãƒ‡ã‚¶ã‚¤ãƒŠãƒ¼ ã‚µãƒãƒ¼ãƒˆã«å¿…è¦ãªãƒ¡ã‚½ãƒƒãƒ‰ã§ã™ã€‚ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®å†…å®¹ã‚’
+		/// ã‚³ãƒ¼ãƒ‰ ã‚¨ãƒ‡ã‚£ã‚¿ãƒ¼ã§å¤‰æ›´ã—ãªã„ã§ãã ã•ã„ã€‚
 		/// </summary>
 		void InitializeComponent(void)
 		{
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(Comtex::typeid));
 			this->startButton1 = (gcnew System::Windows::Forms::Button());
 			this->stopButton1 = (gcnew System::Windows::Forms::Button());
+			this->ipSetting = (gcnew System::Windows::Forms::Button());
+			this->ipAddress = (gcnew System::Windows::Forms::TextBox());
+			this->userName = (gcnew System::Windows::Forms::TextBox());
+			this->password = (gcnew System::Windows::Forms::TextBox());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
@@ -86,8 +91,8 @@ namespace ComTex_ALPR {
 			// 
 			this->startButton1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
 				static_cast<System::Int32>(static_cast<System::Byte>(255)));
-			this->startButton1->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 12));
-			this->startButton1->Location = System::Drawing::Point(12, 61);
+			this->startButton1->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
+			this->startButton1->Location = System::Drawing::Point(12, 60);
 			this->startButton1->Name = L"startButton1";
 			this->startButton1->Size = System::Drawing::Size(80, 30);
 			this->startButton1->TabIndex = 0;
@@ -99,8 +104,8 @@ namespace ComTex_ALPR {
 			// 
 			this->stopButton1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(128)),
 				static_cast<System::Int32>(static_cast<System::Byte>(128)));
-			this->stopButton1->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 12));
-			this->stopButton1->Location = System::Drawing::Point(12, 118);
+			this->stopButton1->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
+			this->stopButton1->Location = System::Drawing::Point(12, 120);
 			this->stopButton1->Name = L"stopButton1";
 			this->stopButton1->Size = System::Drawing::Size(80, 30);
 			this->stopButton1->TabIndex = 1;
@@ -108,10 +113,53 @@ namespace ComTex_ALPR {
 			this->stopButton1->UseVisualStyleBackColor = false;
 			this->stopButton1->Click += gcnew System::EventHandler(this, &Comtex::stopButton1_Click);
 			// 
+			// ipSettingButton
+			// 
+			this->ipSetting->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
+				static_cast<System::Int32>(static_cast<System::Byte>(255)));
+			this->ipSetting->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
+			this->ipSetting->Location = System::Drawing::Point(12, 180);
+			this->ipSetting->Name = L"ipSetting";
+			this->ipSetting->Size = System::Drawing::Size(80, 30);
+			this->ipSetting->TabIndex = 0;
+			this->ipSetting->Text = L"Setting";
+			this->ipSetting->UseVisualStyleBackColor = false;
+			this->ipSetting->Click += gcnew System::EventHandler(this, &Comtex::ipSetting_Click);
+			//
+			// ipAddress
+			//
+			this->ipAddress->AcceptsReturn = false;
+			this->ipAddress->AcceptsTab = true;
+			this->ipAddress->Multiline = false;
+			this->ipAddress->Text = "192.168.100.30";
+			this->ipAddress->Location = System::Drawing::Point(100, 530);
+			this->ipAddress->Size = System::Drawing::Size(200, 20);
+			this->ipAddress->Font = (gcnew System::Drawing::Font(L"MS UI Gothic",13));
+			//
+			// userName
+			//
+			this->userName->AcceptsReturn = false;
+			this->userName->AcceptsTab = true;
+			this->userName->Multiline = false;
+			this->userName->Text = "root";
+			this->userName->Location = System::Drawing::Point(100, 560);
+			this->userName->Size = System::Drawing::Size(100, 20);
+			this->userName->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
+			//
+			// password
+			//
+			this->password->AcceptsReturn = false;
+			this->password->AcceptsTab = true;
+			this->password->Multiline = false;
+			this->password->Text = "taka1974";
+			this->password->Location = System::Drawing::Point(100, 590);
+			this->password->Size = System::Drawing::Size(100, 20);
+			this->password->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
+			// 
 			// pictureBox1
 			// 
 			this->pictureBox1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.BackgroundImage")));
-			this->pictureBox1->Location = System::Drawing::Point(98, 37);
+			this->pictureBox1->Location = System::Drawing::Point(100, 40);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(640, 480);
 			this->pictureBox1->TabIndex = 2;
@@ -126,7 +174,7 @@ namespace ComTex_ALPR {
 			this->dataGridView1->Size = System::Drawing::Size(430, 400);
 			this->dataGridView1->SelectionMode = DataGridViewSelectionMode::FullRowSelect;
 			this->dataGridView1->TabIndex = 3;
-			this->dataGridView1->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &Comtex::dataGridView1_CellContentClick);
+		//	this->dataGridView1->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &Comtex::dataGridView1_CellContentClick);
 			this->dataGridView1->AutoSizeRowsMode = DataGridViewAutoSizeRowsMode::DisplayedCellsExceptHeaders;
 			this->dataGridView1->MultiSelect = true;
 			this->dataGridView1->ColumnCount = 2;
@@ -186,7 +234,7 @@ namespace ComTex_ALPR {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::WindowFrame;
-			this->ClientSize = System::Drawing::Size(1264, 761);
+			this->ClientSize = System::Drawing::Size(1280, 768);
 			this->Controls->Add(this->radioButton2);
 			this->Controls->Add(this->radioButton1);
 			this->Controls->Add(this->pictureBox3);
@@ -195,6 +243,10 @@ namespace ComTex_ALPR {
 			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->stopButton1);
 			this->Controls->Add(this->startButton1);
+			this->Controls->Add(this->ipSetting);
+			this->Controls->Add(this->ipAddress);
+			this->Controls->Add(this->userName);
+			this->Controls->Add(this->password);
 			this->Name = L"Comtex";
 			this->Text = L"Comtex";
 			this->Load += gcnew System::EventHandler(this, &Comtex::Comtex_Load);
@@ -209,41 +261,57 @@ namespace ComTex_ALPR {
 #pragma endregion
 	private: System::Void Comtex_Load(System::Object^  sender, System::EventArgs^  e) {
 	}
-	private: System::Void dataGridView1_CellContentClick(System::Object^  sender, System::Windows::Forms::DataGridViewCellEventArgs^  e) {
+	private: System::Void ipSetting_Click(System::Object^  sender, System::EventArgs^  e) {
+
+		this->ipAddress->Text = cameraSet(0);
+		this->userName->Text = cameraSet(1);
+		this->password->Text = cameraSet(2);
+
 	}
 	private: System::Void startButton1_Click(System::Object^  sender, System::EventArgs^  e) {
-		startButton1->Enabled = false;
-		radioButton1->Enabled = false;
-		radioButton2->Enabled = false;
-		loadNueron();
-		accessIpCamera();
-		accessCascade();
-		createNumberArray();
-		checkStopKey = 1;
-        //System::Windows::Forms::DataGridView^ gridName = this->dataGridView1;
-		Thread ^subThread = gcnew Thread(gcnew ThreadStart(this, &Comtex::processThread));
-		subThread->IsBackground;
-		subThread->Start();
-		
+
+			startButton1->Enabled = false;
+			radioButton1->Enabled = false;
+			radioButton2->Enabled = false;
+			loadNueron();
+			accessCascade();
+			createNumberArray();
+			checkStopKey = 1;
+			accessIpCamera(this->ipAddress->Text, this->userName->Text, this->password->Text);
+
+			if (checkStopKey == 0) {
+				startButton1->Enabled = true;
+				radioButton1->Enabled = true;
+				radioButton2->Enabled = true;
+				return; }
+
+			//System::Windows::Forms::DataGridView^ gridName = this->dataGridView1;
+			Thread ^subThread = gcnew Thread(gcnew ThreadStart(this, &Comtex::processThread));
+			subThread->IsBackground;
+			subThread->Start();
 	}
 
 	private: System::Void processThread(){
-		while(checkStopKey == 1){
+		while (checkStopKey == 1) {
+
 			readOriginal();
 			DrawCVImage(pictureBox1, matrix32s);
 
-			general700_cascade.detectMultiScale(gray, commPlate, 1.3, 5);
-			if (commPlate.empty()){
-				
+			if (this->radioButton1->Checked) {
+				general700_cascade.detectMultiScale(gray, commPlate, 1.3, 5);
+				if (commPlate.empty()) {
+				//	MessageBox::Show("No Cascade Detected! Check the data holder.");
+				//	break;
+				}
+				else {
+					processNeuralNetwork();
+					BeginInvoke(gcnew delegate_of_gridView(this, &Comtex::gridView));
+					DrawCVImage(pictureBox2, contoursMat);
+					DrawCVImage(pictureBox3, concatnated);
+				}
+				BeginInvoke(gcnew conditionStopDelegate(this, &Comtex::stopFunction));
 			}
-			else{
-				processNeuralNetwork();
-				BeginInvoke(gcnew delegate_of_gridView(this, &Comtex::gridView));
-				DrawCVImage(pictureBox2, contoursMat);
-				DrawCVImage(pictureBox3, concatnated);
-			}
-		    BeginInvoke(gcnew conditionStopDelegate(this, &Comtex::stopFunction));
-	}
+		}
 		BeginInvoke(gcnew delegateOfenableStartButton(this, &Comtex::enableSartButton));
 
 }
@@ -271,7 +339,7 @@ namespace ComTex_ALPR {
 			intSS << num[3] << num[2] << num[1] << num[0];
 			string integerSS = intSS.str();
 			System::String^ numberN = gcnew System::String(integerSS.c_str());
-			array<System::String^>^ rows0 = gcnew array<System::String^>{timeStamp,numberN};
+			cli::array<System::String^>^ rows0 = gcnew cli::array<System::String^>{timeStamp, numberN};
 			DataGridViewRowCollection^ rows = this->dataGridView1->Rows;
 			rows->Add(rows0);
 			if (rows->Count == 30){
