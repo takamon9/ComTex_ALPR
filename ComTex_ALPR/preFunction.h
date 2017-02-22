@@ -4,10 +4,10 @@
 #include "neuralNetwork.h"
 
 
-string uname = "root";
-string password = "taka1974";
+//string uname = "root";
+//string password = "taka1974";
 //string ip_address = "http://" + uname + ":" + password + "@192.168.100.50/mjpg/video.mjpg";//Axis
-string ip_address = "http://" + uname + ":" + password + "@192.168.100.12/-wvhttp-01-/GetOneShot?image_size=640x480&frame_count=0";//canon vb-c300
+//string ip_address = "http://" + uname + ":" + password + "@192.168.100.30/-wvhttp-01-/GetOneShot?image_size=640x480&frame_count=0";//canon vb-c300
 //string ip_address = "http://" + uname + ":" + password + "@192.168.100.50/cgi-bin/mjpeg?session_id=[CHANNEL]&buffer=0&prio=high&frame=4";
 
 
@@ -25,12 +25,27 @@ int loadNueron(){
 
 }
 
+string MarshalString(System::String^ sys_str) {
+	using namespace System;
+	using namespace Runtime::InteropServices;
+	string nstr;
 
-int accessIpCamera(){
-	if (!capture.open(ip_address))
+	const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(sys_str)).ToPointer();
+	nstr = chars;
+	Marshal::FreeHGlobal(IntPtr((void*)chars));
+	return nstr;
+}
+
+int accessIpCamera(System::String^ ipAddress, System::String^ user_name, System::String^ pass_word) {
+	string name_of_ip_address;
+	System::String^ ip_address = gcnew System::String("http://" + user_name + ":" + pass_word + "@" + ipAddress + "/-wvhttp-01-/GetOneShot?image_size=640x480&frame_count=0");
+	name_of_ip_address = MarshalString(ip_address);
+	if (!capture.open(name_of_ip_address))
 	{
-		MessageBox::Show("Cannot connect IP camera! Check Your Camera Connection.","Cation",MessageBoxButtons::OK,MessageBoxIcon::Asterisk);
-		system("pause");
+		MessageBox::Show("Cannot connect IP camera! Check Your Camera Connection.", "Cation", MessageBoxButtons::OK, MessageBoxIcon::Asterisk);
+		
+		checkStopKey = 0;
+		
 		return -1;
 	}
 }
@@ -45,14 +60,49 @@ int accessCascade(){
 	}
 }
 
+System::String^ cameraSet(int nameOf) {
+
+	string fileName = ("./dat/cameraSet.dat");
+	vector<std::string> buffer_of_setting;
+	char setting[256];
+	vector<string> dataSetting;
+	ifstream cameraSet;
+	cameraSet.open(fileName);
+
+	string collection;
+
+		cameraSet.getline(setting, 255);
+
+		string setting_str(setting);
+		istringstream parts(setting_str);
+		string bbs;
+
+
+		for(int num = 0; num < 3; num++) {
+			parts >> bbs;
+			buffer_of_setting.push_back(bbs);
+
+		}
+
+		System::String^ sys_ip,^ sys_user,^ sys_pass;
+
+	sys_ip = gcnew System::String(buffer_of_setting[0].c_str());
+	sys_user = gcnew System::String(buffer_of_setting[1].c_str());
+	sys_pass = gcnew System::String(buffer_of_setting[2].c_str());
+
+//	MessageBox::Show(sys_user);
+
+	if (nameOf == 0) { return sys_ip; }
+	if (nameOf == 1) { return sys_user; }
+	if (nameOf == 2) { return sys_pass;}
+}
+
 void createNumberArray(){
 	for (int j = 0; j < 4; j++) {
 
 		number[j].create(numArrWidth, numArrHight, CV_8SC3);
 
 	}
-
-
 }
 
 
