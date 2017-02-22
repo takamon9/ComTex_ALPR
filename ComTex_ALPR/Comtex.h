@@ -41,6 +41,8 @@ namespace ComTex_ALPR {
 	private: System::Windows::Forms::Button^  startButton1;
 	private: System::Windows::Forms::Button^  stopButton1;
 	private: System::Windows::Forms::Button^  ipSetting;
+	private: System::Windows::Forms::Button^ saveSettingButton;
+	private: System::Windows::Forms::Button^ exitButton;
 	private: TextBox^ ipAddress;
 	private: TextBox^ userName;
 	private: TextBox^ password;
@@ -81,6 +83,8 @@ namespace ComTex_ALPR {
 			this->pictureBox3 = (gcnew System::Windows::Forms::PictureBox());
 			this->radioButton1 = (gcnew System::Windows::Forms::RadioButton());
 			this->radioButton2 = (gcnew System::Windows::Forms::RadioButton());
+			this->saveSettingButton = (gcnew System::Windows::Forms::Button());
+			this->exitButton = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
@@ -118,13 +122,26 @@ namespace ComTex_ALPR {
 			this->ipSetting->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
 				static_cast<System::Int32>(static_cast<System::Byte>(255)));
 			this->ipSetting->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
-			this->ipSetting->Location = System::Drawing::Point(12, 180);
+			this->ipSetting->Location = System::Drawing::Point(12, 530);
 			this->ipSetting->Name = L"ipSetting";
 			this->ipSetting->Size = System::Drawing::Size(80, 30);
 			this->ipSetting->TabIndex = 0;
-			this->ipSetting->Text = L"Setting";
+			this->ipSetting->Text = L"LOAD";
 			this->ipSetting->UseVisualStyleBackColor = false;
 			this->ipSetting->Click += gcnew System::EventHandler(this, &Comtex::ipSetting_Click);
+			// 
+			// saveSettingButton
+			// 
+			this->saveSettingButton->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
+				static_cast<System::Int32>(static_cast<System::Byte>(255)));
+			this->saveSettingButton->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
+			this->saveSettingButton->Location = System::Drawing::Point(12, 570);
+			this->saveSettingButton->Name = L"SaveSettingButton";
+			this->saveSettingButton->Size = System::Drawing::Size(80, 30);
+			this->saveSettingButton->TabIndex = 0;
+			this->saveSettingButton->Text = L"SAVE";
+			this->saveSettingButton->UseVisualStyleBackColor = false;
+			this->saveSettingButton->Click += gcnew System::EventHandler(this, &Comtex::saveSettingButton_Click);
 			//
 			// ipAddress
 			//
@@ -155,6 +172,19 @@ namespace ComTex_ALPR {
 			this->password->Location = System::Drawing::Point(100, 590);
 			this->password->Size = System::Drawing::Size(100, 20);
 			this->password->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
+			//
+			// exitButton
+			//
+			this->exitButton->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(128)),
+				static_cast<System::Int32>(static_cast<System::Byte>(128)));
+			this->exitButton->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
+			this->exitButton->Location = System::Drawing::Point(12, 630);
+			this->exitButton->Name = L"exit";
+			this->exitButton->Size = System::Drawing::Size(80, 30);
+			this->exitButton->TabIndex = 0;
+			this->exitButton->Text = L"Exit";
+			this->exitButton->UseVisualStyleBackColor = false;
+			this->exitButton->Click += gcnew System::EventHandler(this, &Comtex::exitButton_Click);
 			// 
 			// pictureBox1
 			// 
@@ -188,7 +218,7 @@ namespace ComTex_ALPR {
 			// pictureBox2
 			// 
 			this->pictureBox2->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			this->pictureBox2->Location = System::Drawing::Point(750, 37);
+			this->pictureBox2->Location = System::Drawing::Point(750, 40);
 			this->pictureBox2->Name = L"pictureBox2";
 			this->pictureBox2->Size = System::Drawing::Size(200, 100);
 			this->pictureBox2->TabIndex = 4;
@@ -197,7 +227,7 @@ namespace ComTex_ALPR {
 			// pictureBox3
 			// 
 			this->pictureBox3->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			this->pictureBox3->Location = System::Drawing::Point(960, 37);
+			this->pictureBox3->Location = System::Drawing::Point(960, 40);
 			this->pictureBox3->Name = L"pictureBox3";
 			this->pictureBox3->Size = System::Drawing::Size(200, 50);
 			this->pictureBox3->TabIndex = 5;
@@ -208,7 +238,7 @@ namespace ComTex_ALPR {
 			this->radioButton1->AutoSize = true;
 			this->radioButton1->Checked = true;
 			this->radioButton1->ForeColor = System::Drawing::Color::White;
-			this->radioButton1->Location = System::Drawing::Point(98, 15);
+			this->radioButton1->Location = System::Drawing::Point(100, 15);
 			this->radioButton1->Name = L"radioButton1";
 			this->radioButton1->Size = System::Drawing::Size(72, 16);
 			this->radioButton1->TabIndex = 6;
@@ -228,6 +258,7 @@ namespace ComTex_ALPR {
 			this->radioButton2->TabStop = true;
 			this->radioButton2->Text = L"ALPR OFF";
 			this->radioButton2->UseVisualStyleBackColor = true;
+
 			// 
 			// Comtex
 			// 
@@ -247,6 +278,8 @@ namespace ComTex_ALPR {
 			this->Controls->Add(this->ipAddress);
 			this->Controls->Add(this->userName);
 			this->Controls->Add(this->password);
+			this->Controls->Add(this->saveSettingButton);
+			this->Controls->Add(this->exitButton);
 			this->Name = L"Comtex";
 			this->Text = L"Comtex";
 			this->Load += gcnew System::EventHandler(this, &Comtex::Comtex_Load);
@@ -261,6 +294,18 @@ namespace ComTex_ALPR {
 #pragma endregion
 	private: System::Void Comtex_Load(System::Object^  sender, System::EventArgs^  e) {
 	}
+
+	private: System::Void exitButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		int anserValue;
+		System::String^ caption = "Warning!";
+		if (MessageBox::Show("Are you sure you want to close the program?", caption, MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::No) {
+			return;
+		}
+		
+		checkStopKey = 0;
+		this->Close();
+	}
+
 	private: System::Void ipSetting_Click(System::Object^  sender, System::EventArgs^  e) {
 
 		this->ipAddress->Text = cameraSet(0);
@@ -268,6 +313,12 @@ namespace ComTex_ALPR {
 		this->password->Text = cameraSet(2);
 
 	}
+
+	private: System::Void saveSettingButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		saveSetting(this->ipAddress->Text, this->userName->Text, this->password->Text);
+	}
+
+
 	private: System::Void startButton1_Click(System::Object^  sender, System::EventArgs^  e) {
 
 			startButton1->Enabled = false;
