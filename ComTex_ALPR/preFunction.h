@@ -28,12 +28,12 @@ int loadNueron(){
 string MarshalString(System::String^ sys_str) {
 	using namespace System;
 	using namespace Runtime::InteropServices;
-	string nstr;
+	string normal_str;
 
 	const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(sys_str)).ToPointer();
-	nstr = chars;
+	normal_str = chars;
 	Marshal::FreeHGlobal(IntPtr((void*)chars));
-	return nstr;
+	return normal_str;
 }
 
 int accessIpCamera(System::String^ ipAddress, System::String^ user_name, System::String^ pass_word) {
@@ -43,9 +43,7 @@ int accessIpCamera(System::String^ ipAddress, System::String^ user_name, System:
 	if (!capture.open(name_of_ip_address))
 	{
 		MessageBox::Show("Cannot connect IP camera! Check Your Camera Connection.", "Cation", MessageBoxButtons::OK, MessageBoxIcon::Asterisk);
-		
 		checkStopKey = 0;
-		
 		return -1;
 	}
 }
@@ -96,6 +94,31 @@ System::String^ cameraSet(int nameOf) {
 	if (nameOf == 1) { return sys_user; }
 	if (nameOf == 2) { return sys_pass;}
 }
+
+void saveSetting(System::String^ ip,System::String^ user,System::String^ pass) {
+
+	string saveIp,saveUser,savePass;
+	saveIp = MarshalString(ip);
+	saveUser = MarshalString(user);
+	savePass = MarshalString(pass);
+
+	stringstream save_ss;
+	save_ss << saveIp << " " << saveUser << " " << savePass;
+	
+	fstream save_fs;
+	save_fs.open("./dat/cameraSet.dat",ios::in |ios::out | ios::trunc);
+	if (save_fs.is_open() == 0) {
+		MessageBox::Show("Cannot open Setting File.");
+		return;
+	}
+
+	std::string save_str = save_ss.str();
+	const char* ss_char = save_str.c_str();
+	save_fs.write(ss_char, save_str.size());
+	save_fs.close();
+
+}
+
 
 void createNumberArray(){
 	for (int j = 0; j < 4; j++) {
