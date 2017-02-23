@@ -14,8 +14,8 @@ using namespace System::Windows::Forms;
 
 int loadNueron(){
 
-	cv::String fileName("./dat/neuron.xml");
-	cv::String objName("neuron");
+	cv::String fileName("./dat/neuron.xml"); // cv::String
+	string objName("neuron");  //std::string
 
 	neuron = ANN_MLP::Algorithm::load<ANN_MLP>(fileName,objName);
 
