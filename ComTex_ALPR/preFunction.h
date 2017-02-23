@@ -10,19 +10,19 @@
 //string ip_address = "http://" + uname + ":" + password + "@192.168.100.30/-wvhttp-01-/GetOneShot?image_size=640x480&frame_count=0";//canon vb-c300
 //string ip_address = "http://" + uname + ":" + password + "@192.168.100.50/cgi-bin/mjpeg?session_id=[CHANNEL]&buffer=0&prio=high&frame=4";
 
-
 using namespace System::Windows::Forms;
 
-
 int loadNueron(){
-	neuron = ANN_MLP::load<ANN_MLP>("./dat/neuron.xml", "nueron");
-	{
-		if (neuron == nullptr){
-			MessageBox::Show("Check your neuron.xml exists the folder.","Caution",MessageBoxButtons::OK,MessageBoxIcon::Asterisk);
-			return -1;
-		}
-	}
 
+	cv::String fileName("./dat/neuron.xml");
+	cv::String objName("neuron");
+
+	neuron = ANN_MLP::Algorithm::load<ANN_MLP>(fileName,objName);
+
+		if (neuron.empty() == true){
+			MessageBox::Show("Check your neuron.xml exists the folder.","Caution",MessageBoxButtons::OK,MessageBoxIcon::Asterisk);
+			return 0;
+		}
 }
 
 string MarshalString(System::String^ sys_str) {
@@ -40,7 +40,9 @@ int accessIpCamera(System::String^ ipAddress, System::String^ user_name, System:
 	string name_of_ip_address;
 	System::String^ ip_address = gcnew System::String("http://" + user_name + ":" + pass_word + "@" + ipAddress + "/-wvhttp-01-/GetOneShot?image_size=640x480&frame_count=0");
 	name_of_ip_address = MarshalString(ip_address);
-	if (!capture.open(name_of_ip_address))
+	capture.open(name_of_ip_address);
+
+	if (capture.isOpened() == 0)
 	{
 		MessageBox::Show("Cannot connect IP camera! Check Your Camera Connection.", "Cation", MessageBoxButtons::OK, MessageBoxIcon::Asterisk);
 		checkStopKey = 0;
@@ -73,12 +75,11 @@ System::String^ cameraSet(int nameOf) {
 
 		string setting_str(setting);
 		istringstream parts(setting_str);
-		string bbs;
-
+		string partWord;
 
 		for(int num = 0; num < 3; num++) {
-			parts >> bbs;
-			buffer_of_setting.push_back(bbs);
+			parts >> partWord;
+			buffer_of_setting.push_back(partWord);
 
 		}
 
