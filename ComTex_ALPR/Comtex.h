@@ -40,22 +40,29 @@ namespace ComTex_ALPR {
 		}
 	private: System::Windows::Forms::Button^  startButton1;
 	private: System::Windows::Forms::Button^  stopButton1;
-	private: System::Windows::Forms::Button^  ipSetting;
-	private: System::Windows::Forms::Button^ saveSettingButton;
+	private: System::Windows::Forms::Button^  loadButton;
+	private: System::Windows::Forms::Button^ saveButton;
 	private: System::Windows::Forms::Button^ exitButton;
+	private: System::Windows::Forms::Button^ addRow;
+	private: System::Windows::Forms::Button^ deleteRow;
+	private: System::Windows::Forms::RadioButton^ alprOn;
+	private: System::Windows::Forms::RadioButton^ alprOff;
+	private: System::Windows::Forms::Label^ onoffLamp;
 	private: TextBox^ ipAddress;
 	private: TextBox^ userName;
 	private: TextBox^ password;
+	private: ComboBox^ cameraMaker;
+	private: TextBox^ cameraName;
 	protected:
 
 	protected:
 
 	private: System::Windows::Forms::PictureBox^  pictureBox1;
 	private: System::Windows::Forms::DataGridView^  dataGridView1;
+	private: System::Windows::Forms::DataGridView^ cameraList;
 	private: System::Windows::Forms::PictureBox^  pictureBox2;
 	private: System::Windows::Forms::PictureBox^  pictureBox3;
-	private: System::Windows::Forms::RadioButton^  radioButton1;
-	private: System::Windows::Forms::RadioButton^  radioButton2;
+	private: System::Windows::Forms::GroupBox^ groupBox1;
 
 	private:
 		/// <summary>
@@ -73,7 +80,7 @@ namespace ComTex_ALPR {
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(Comtex::typeid));
 			this->startButton1 = (gcnew System::Windows::Forms::Button());
 			this->stopButton1 = (gcnew System::Windows::Forms::Button());
-			this->ipSetting = (gcnew System::Windows::Forms::Button());
+			this->loadButton = (gcnew System::Windows::Forms::Button());
 			this->ipAddress = (gcnew System::Windows::Forms::TextBox());
 			this->userName = (gcnew System::Windows::Forms::TextBox());
 			this->password = (gcnew System::Windows::Forms::TextBox());
@@ -81,22 +88,57 @@ namespace ComTex_ALPR {
 			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox3 = (gcnew System::Windows::Forms::PictureBox());
-			this->radioButton1 = (gcnew System::Windows::Forms::RadioButton());
-			this->radioButton2 = (gcnew System::Windows::Forms::RadioButton());
-			this->saveSettingButton = (gcnew System::Windows::Forms::Button());
+			this->saveButton = (gcnew System::Windows::Forms::Button());
 			this->exitButton = (gcnew System::Windows::Forms::Button());
+			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
+			this->cameraList = (gcnew System::Windows::Forms::DataGridView());
+			this->cameraName = (gcnew System::Windows::Forms::TextBox());
+			this->cameraMaker = (gcnew System::Windows::Forms::ComboBox());
+			this->addRow = (gcnew System::Windows::Forms::Button());
+			this->deleteRow = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->BeginInit();
 			this->SuspendLayout();
+			//
+			// GroupBox1
+			//
+			this->groupBox1->Text = (L"Recognition");
+			this->groupBox1->Size = System::Drawing::Size(300, 40);
+			this->groupBox1->Left = 100;
+			this->groupBox1->Top = 5;
+			this->groupBox1->AutoSize = false;
+			this->groupBox1->FlatStyle = FlatStyle::Flat;
+			this->groupBox1->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 12));
+			onoffLamp = gcnew System::Windows::Forms::Label();
+			this->groupBox1->Controls->Add(onoffLamp);
+			onoffLamp->Size = System::Drawing::Size(10, 10);
+			onoffLamp->Left = 20;
+			onoffLamp->Top = 20;
+			onoffLamp->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
+				static_cast<System::Int32>(static_cast<System::Byte>(0)));
+			alprOn = gcnew System::Windows::Forms::RadioButton();
+			alprOn->Text = (L"ALPR ON");
+			alprOn->Top = 15;
+			alprOn->Left = 50;
+			alprOn->Checked = true;
+			alprOn->UseVisualStyleBackColor = true;
+			alprOff = gcnew System::Windows::Forms::RadioButton();
+			alprOff->Text = (L"ALPR OFF");
+			alprOff->Top = 15;
+			alprOff->Left = alprOn->Right + 10;
+			alprOff->UseVisualStyleBackColor = true;
+			this->groupBox1->Controls->Add(alprOn);
+			this->groupBox1->Controls->Add(alprOff);
+
 			// 
 			// startButton1
 			// 
 			this->startButton1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
 				static_cast<System::Int32>(static_cast<System::Byte>(255)));
 			this->startButton1->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
-			this->startButton1->Location = System::Drawing::Point(12, 60);
+			this->startButton1->Location = System::Drawing::Point(12, 50);
 			this->startButton1->Name = L"startButton1";
 			this->startButton1->Size = System::Drawing::Size(80, 30);
 			this->startButton1->TabIndex = 0;
@@ -109,7 +151,7 @@ namespace ComTex_ALPR {
 			this->stopButton1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(128)),
 				static_cast<System::Int32>(static_cast<System::Byte>(128)));
 			this->stopButton1->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
-			this->stopButton1->Location = System::Drawing::Point(12, 120);
+			this->stopButton1->Location = System::Drawing::Point(12, 100);
 			this->stopButton1->Name = L"stopButton1";
 			this->stopButton1->Size = System::Drawing::Size(80, 30);
 			this->stopButton1->TabIndex = 1;
@@ -117,79 +159,125 @@ namespace ComTex_ALPR {
 			this->stopButton1->UseVisualStyleBackColor = false;
 			this->stopButton1->Click += gcnew System::EventHandler(this, &Comtex::stopButton1_Click);
 			// 
-			// ipSettingButton
+			// LoadButton
 			// 
-			this->ipSetting->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
+			this->loadButton->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
 				static_cast<System::Int32>(static_cast<System::Byte>(255)));
-			this->ipSetting->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
-			this->ipSetting->Location = System::Drawing::Point(12, 530);
-			this->ipSetting->Name = L"ipSetting";
-			this->ipSetting->Size = System::Drawing::Size(80, 30);
-			this->ipSetting->TabIndex = 0;
-			this->ipSetting->Text = L"LOAD";
-			this->ipSetting->UseVisualStyleBackColor = false;
-			this->ipSetting->Click += gcnew System::EventHandler(this, &Comtex::ipSetting_Click);
+			this->loadButton->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
+			this->loadButton->Location = System::Drawing::Point(12, 585);
+			this->loadButton->Name = L"loadButton";
+			this->loadButton->Size = System::Drawing::Size(80, 30);
+			this->loadButton->TabIndex = 0;
+			this->loadButton->Text = L"LOAD";
+			this->loadButton->UseVisualStyleBackColor = false;
+			this->loadButton->Click += gcnew System::EventHandler(this, &Comtex::loadButton_Click);
 			// 
 			// saveSettingButton
 			// 
-			this->saveSettingButton->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
+			this->saveButton->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
 				static_cast<System::Int32>(static_cast<System::Byte>(255)));
-			this->saveSettingButton->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
-			this->saveSettingButton->Location = System::Drawing::Point(12, 570);
-			this->saveSettingButton->Name = L"SaveSettingButton";
-			this->saveSettingButton->Size = System::Drawing::Size(80, 30);
-			this->saveSettingButton->TabIndex = 0;
-			this->saveSettingButton->Text = L"SAVE";
-			this->saveSettingButton->UseVisualStyleBackColor = false;
-			this->saveSettingButton->Click += gcnew System::EventHandler(this, &Comtex::saveSettingButton_Click);
+			this->saveButton->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
+			this->saveButton->Location = System::Drawing::Point(12, 620);
+			this->saveButton->Name = L"SaveButton";
+			this->saveButton->Size = System::Drawing::Size(80, 30);
+			this->saveButton->TabIndex = 0;
+			this->saveButton->Text = L"SAVE";
+			this->saveButton->UseVisualStyleBackColor = false;
+			this->saveButton->Click += gcnew System::EventHandler(this, &Comtex::saveButton_Click);
+			//
+			// camera name
+			//
+			this->cameraName->AcceptsReturn = false;
+			this->cameraName->AcceptsTab = true;
+			this->cameraName->Multiline = false;
+			this->cameraName->Text = "Name";
+			this->cameraName->Location = System::Drawing::Point(100, 540);
+			this->cameraName->Size = System::Drawing::Size(100, 15);
+			this->cameraName->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 11));
+			//
+			// camera Maker
+			//
+			this->cameraMaker->Items->Add("Canon");
+			this->cameraMaker->Items->Add("Panasonic");
+			this->cameraMaker->Items->Add("Axis");
+			this->cameraMaker->Items->Add("Sony");
+			this->cameraMaker->Text = "Manufacturer";
+			this->cameraMaker->Location = System::Drawing::Point(210, 540);
+			this->cameraMaker->Size = System::Drawing::Size(100, 15);
+			this->cameraMaker->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 11));
 			//
 			// ipAddress
 			//
 			this->ipAddress->AcceptsReturn = false;
 			this->ipAddress->AcceptsTab = true;
 			this->ipAddress->Multiline = false;
-			this->ipAddress->Text = "192.168.100.30";
-			this->ipAddress->Location = System::Drawing::Point(100, 530);
-			this->ipAddress->Size = System::Drawing::Size(200, 20);
-			this->ipAddress->Font = (gcnew System::Drawing::Font(L"MS UI Gothic",13));
+			this->ipAddress->Text = "IP Address";
+			this->ipAddress->Location = System::Drawing::Point(320, 540);
+			this->ipAddress->Size = System::Drawing::Size(140, 15);
+			this->ipAddress->Font = (gcnew System::Drawing::Font(L"MS UI Gothic",11));
 			//
 			// userName
 			//
 			this->userName->AcceptsReturn = false;
 			this->userName->AcceptsTab = true;
 			this->userName->Multiline = false;
-			this->userName->Text = "root";
-			this->userName->Location = System::Drawing::Point(100, 560);
-			this->userName->Size = System::Drawing::Size(100, 20);
-			this->userName->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
+			this->userName->Text = "User ID";
+			this->userName->Location = System::Drawing::Point(470, 540);
+			this->userName->Size = System::Drawing::Size(100, 15);
+			this->userName->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 11));
 			//
 			// password
 			//
 			this->password->AcceptsReturn = false;
 			this->password->AcceptsTab = true;
 			this->password->Multiline = false;
-			this->password->Text = "taka1974";
-			this->password->Location = System::Drawing::Point(100, 590);
-			this->password->Size = System::Drawing::Size(100, 20);
-			this->password->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
+			this->password->Text = "Password";
+			this->password->Location = System::Drawing::Point(580, 540);
+			this->password->Size = System::Drawing::Size(100, 15);
+			this->password->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 11));
 			//
 			// exitButton
 			//
 			this->exitButton->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(128)),
 				static_cast<System::Int32>(static_cast<System::Byte>(128)));
 			this->exitButton->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
-			this->exitButton->Location = System::Drawing::Point(12, 630);
+			this->exitButton->Location = System::Drawing::Point(12, 670);
 			this->exitButton->Name = L"exit";
 			this->exitButton->Size = System::Drawing::Size(80, 30);
 			this->exitButton->TabIndex = 0;
 			this->exitButton->Text = L"Exit";
 			this->exitButton->UseVisualStyleBackColor = false;
 			this->exitButton->Click += gcnew System::EventHandler(this, &Comtex::exitButton_Click);
+			//
+			// addRow_button
+			//
+			this->addRow->BackColor = Color::AntiqueWhite;
+			this->addRow->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
+			this->addRow->Location = System::Drawing::Point(12, 510);
+			this->addRow->Name = L"Add";
+			this->addRow->Size = System::Drawing::Size(80, 30);
+			this->addRow->TabIndex = 0;
+			this->addRow->Text = L"Add";
+			this->addRow->UseVisualStyleBackColor = false;
+			this->addRow->Click += gcnew System::EventHandler(this, &Comtex::addRow_Click);
+			//
+			// deleteRow_button
+			//
+			this->deleteRow->BackColor = Color::AntiqueWhite;
+			this->deleteRow->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 13));
+			this->deleteRow->Location = System::Drawing::Point(12, 545);
+			this->deleteRow->Name = L"Delete";
+			this->deleteRow->Size = System::Drawing::Size(80, 30);
+			this->deleteRow->TabIndex = 0;
+			this->deleteRow->Text = L"Delete";
+			this->deleteRow->UseVisualStyleBackColor = false;
+			this->deleteRow->Click += gcnew System::EventHandler(this, &Comtex::deleteRow_Click);
+
 			// 
 			// pictureBox1
 			// 
 			this->pictureBox1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.BackgroundImage")));
-			this->pictureBox1->Location = System::Drawing::Point(100, 40);
+			this->pictureBox1->Location = System::Drawing::Point(100, 50);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(640, 480);
 			this->pictureBox1->TabIndex = 2;
@@ -204,7 +292,6 @@ namespace ComTex_ALPR {
 			this->dataGridView1->Size = System::Drawing::Size(430, 400);
 			this->dataGridView1->SelectionMode = DataGridViewSelectionMode::FullRowSelect;
 			this->dataGridView1->TabIndex = 3;
-		//	this->dataGridView1->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &Comtex::dataGridView1_CellContentClick);
 			this->dataGridView1->AutoSizeRowsMode = DataGridViewAutoSizeRowsMode::DisplayedCellsExceptHeaders;
 			this->dataGridView1->MultiSelect = true;
 			this->dataGridView1->ColumnCount = 2;
@@ -213,12 +300,33 @@ namespace ComTex_ALPR {
 			this->dataGridView1->AllowUserToAddRows = true;
 			this->dataGridView1->Columns[0]->SortMode = DataGridViewColumnSortMode::Automatic;
 			this->dataGridView1->Sort(dataGridView1->Columns[0], System::ComponentModel::ListSortDirection::Descending);
-
+			//
+			// CameraList
+			//
+			this->cameraList->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->cameraList->Location = System::Drawing::Point(100, 570);
+			this->cameraList->Name = L"cameraList";
+			this->cameraList->RowTemplate->Height = 21;
+			this->cameraList->Size = System::Drawing::Size(640, 120);
+			this->cameraList->SelectionMode = DataGridViewSelectionMode::FullRowSelect;
+			this->cameraList->TabIndex = 12;
+			this->cameraList->AutoSizeRowsMode = DataGridViewAutoSizeRowsMode::DisplayedCellsExceptHeaders;
+			this->cameraList->MultiSelect = false;
+			this->cameraList->ColumnCount = 6;
+			this->cameraList->Columns[0]->Name = "Camera Name";
+			this->cameraList->Columns[1]->Name = "Maker";
+			this->cameraList->Columns[2]->Name = "IP Address";
+			this->cameraList->Columns[3]->Name = "User ID";
+			this->cameraList->Columns[4]->Name = "Password";
+			this->cameraList->Columns[5]->Name = "Check";
+			this->cameraList->AllowUserToAddRows = true;
+			this->cameraList->Columns[0]->SortMode = DataGridViewColumnSortMode::Automatic;
+			this->cameraList->Sort(cameraList->Columns[0], System::ComponentModel::ListSortDirection::Descending);
 
 			// pictureBox2
 			// 
 			this->pictureBox2->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			this->pictureBox2->Location = System::Drawing::Point(750, 40);
+			this->pictureBox2->Location = System::Drawing::Point(750, 50);
 			this->pictureBox2->Name = L"pictureBox2";
 			this->pictureBox2->Size = System::Drawing::Size(200, 100);
 			this->pictureBox2->TabIndex = 4;
@@ -227,38 +335,11 @@ namespace ComTex_ALPR {
 			// pictureBox3
 			// 
 			this->pictureBox3->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			this->pictureBox3->Location = System::Drawing::Point(960, 40);
+			this->pictureBox3->Location = System::Drawing::Point(960, 50);
 			this->pictureBox3->Name = L"pictureBox3";
 			this->pictureBox3->Size = System::Drawing::Size(200, 50);
 			this->pictureBox3->TabIndex = 5;
 			this->pictureBox3->TabStop = false;
-			// 
-			// radioButton1
-			// 
-			this->radioButton1->AutoSize = true;
-			this->radioButton1->Checked = true;
-			this->radioButton1->ForeColor = System::Drawing::Color::White;
-			this->radioButton1->Location = System::Drawing::Point(100, 15);
-			this->radioButton1->Name = L"radioButton1";
-			this->radioButton1->Size = System::Drawing::Size(72, 16);
-			this->radioButton1->TabIndex = 6;
-			this->radioButton1->Text = L"ALPR ON";
-			this->radioButton1->UseVisualStyleBackColor = true;
-			this->radioButton1->CheckedChanged += gcnew System::EventHandler(this, &Comtex::radioButton1_CheckedChanged);
-			// 
-			// radioButton2
-			// 
-			this->radioButton2->AutoSize = true;
-			this->radioButton2->Checked = false;
-			this->radioButton2->ForeColor = System::Drawing::Color::White;
-			this->radioButton2->Location = System::Drawing::Point(192, 15);
-			this->radioButton2->Name = L"radioButton2";
-			this->radioButton2->Size = System::Drawing::Size(78, 16);
-			this->radioButton2->TabIndex = 7;
-			this->radioButton2->TabStop = true;
-			this->radioButton2->Text = L"ALPR OFF";
-			this->radioButton2->UseVisualStyleBackColor = true;
-
 			// 
 			// Comtex
 			// 
@@ -266,20 +347,26 @@ namespace ComTex_ALPR {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::WindowFrame;
 			this->ClientSize = System::Drawing::Size(1280, 768);
-			this->Controls->Add(this->radioButton2);
-			this->Controls->Add(this->radioButton1);
+	//		this->Controls->Add(this->radioButton2);
+			this->Controls->Add(this->groupBox1);
+		//	this->Controls->Add(this->radioButton1);
 			this->Controls->Add(this->pictureBox3);
 			this->Controls->Add(this->pictureBox2);
 			this->Controls->Add(this->dataGridView1);
 			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->stopButton1);
 			this->Controls->Add(this->startButton1);
-			this->Controls->Add(this->ipSetting);
+			this->Controls->Add(this->loadButton);
 			this->Controls->Add(this->ipAddress);
 			this->Controls->Add(this->userName);
 			this->Controls->Add(this->password);
-			this->Controls->Add(this->saveSettingButton);
+			this->Controls->Add(this->saveButton);
 			this->Controls->Add(this->exitButton);
+			this->Controls->Add(this->cameraList);
+			this->Controls->Add(this->cameraName);
+			this->Controls->Add(this->cameraMaker);
+			this->Controls->Add(this->addRow);
+			this->Controls->Add(this->deleteRow);
 			this->Name = L"Comtex";
 			this->Text = L"Comtex";
 			this->Load += gcnew System::EventHandler(this, &Comtex::Comtex_Load);
@@ -292,7 +379,31 @@ namespace ComTex_ALPR {
 
 		}
 #pragma endregion
+
 	private: System::Void Comtex_Load(System::Object^  sender, System::EventArgs^  e) {
+
+	}
+
+	private: System::Void addRow_Click(System::Object^  sender, System::EventArgs^  e) {
+		System::String^ camName = this->cameraName->Text;
+		System::String^ manfName = this->cameraMaker->Text;
+		System::String^ ipAddress = this->ipAddress->Text;
+		System::String^ userID = this->userName->Text;
+		System::String^ pass = this->password->Text;
+		this->cameraList->Rows->Add(camName,manfName,ipAddress,userID,pass);
+	}
+
+	private: System::Void deleteRow_Click(System::Object^  sender, System::EventArgs^  e) {
+		int selectRows = this->cameraList->SelectedRows[0]->Index;
+		
+		if (selectRows == 0) {
+			return;
+		}
+		if (MessageBox::Show("Are you sure you want to delete the Row?", "Warning!", MessageBoxButtons::OKCancel, MessageBoxIcon::Warning) == System::Windows::Forms::DialogResult::Cancel) {
+			return;
+		}
+
+		this->cameraList->Rows->RemoveAt(selectRows-1);
 	}
 
 	private: System::Void exitButton_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -306,35 +417,48 @@ namespace ComTex_ALPR {
 		this->Close();
 	}
 
-	private: System::Void ipSetting_Click(System::Object^  sender, System::EventArgs^  e) {
-
-		this->ipAddress->Text = cameraSet(0);
-		this->userName->Text = cameraSet(1);
-		this->password->Text = cameraSet(2);
+	private: System::Void loadButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		cameraList->Rows->Add(cameraSet(0), cameraSet(1),cameraSet(2), cameraSet(3), cameraSet(4));
 
 	}
 
-	private: System::Void saveSettingButton_Click(System::Object^  sender, System::EventArgs^  e) {
-		saveSetting(this->ipAddress->Text, this->userName->Text, this->password->Text);
-	}
+	private: System::Void saveButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		int rowCount = cameraList->Rows->Count-1;
+		int columnCount = cameraList->Columns->Count-1;
 
+		for (int i = 0; i < rowCount; i++) {
+			for (int y = 0; y < columnCount; y++) {
+				saveCameraList(cameraList->Rows[i]->Cells[y]->Value->ToString(),i,y);
+			}
+		}
+	}
+		
 
 	private: System::Void startButton1_Click(System::Object^  sender, System::EventArgs^  e) {
 
 			startButton1->Enabled = false;
-			radioButton1->Enabled = false;
-			radioButton2->Enabled = false;
-			loadNueron();
+			alprOn->Enabled = false;
+			alprOff->Enabled = false;
+
 			accessCascade();
 			createNumberArray();
 			checkStopKey = 1;
-			accessIpCamera(this->ipAddress->Text, this->userName->Text, this->password->Text);
+
+			int selectedrowIndex = cameraList->CurrentRow->Index;
+			System::String^ camMaker = cameraList->Rows[selectedrowIndex]->Cells[1]->Value->ToString();
+			System::String^ ipAd = cameraList->Rows[selectedrowIndex]->Cells[2]->Value->ToString();
+			System::String^ userId = cameraList->Rows[selectedrowIndex]->Cells[3]->Value->ToString();
+			System::String^ pass = cameraList->Rows[selectedrowIndex]->Cells[4]->Value->ToString();
+
+			accessIpCamera(ipAd,userId,pass,camMaker);
+			loadNueron();
 
 			if (checkStopKey == 0) {
 				startButton1->Enabled = true;
-				radioButton1->Enabled = true;
-				radioButton2->Enabled = true;
-				return; }
+				alprOn->Enabled = true;
+				alprOff->Enabled = true;
+				return;
+			}
 
 			//System::Windows::Forms::DataGridView^ gridName = this->dataGridView1;
 			Thread ^subThread = gcnew Thread(gcnew ThreadStart(this, &Comtex::processThread));
@@ -343,12 +467,16 @@ namespace ComTex_ALPR {
 	}
 
 	private: System::Void processThread(){
+		if (this->alprOn->Checked == true) {
+			onoffLamp->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+				static_cast<System::Int32>(static_cast<System::Byte>(0)));
+		}
 		while (checkStopKey == 1) {
 
 			readOriginal();
 			DrawCVImage(pictureBox1, matrix32s);
 
-			if (this->radioButton1->Checked) {
+			if (this->alprOn->Checked) {
 				general700_cascade.detectMultiScale(gray, commPlate, 1.3, 5);
 				if (commPlate.empty()) {
 				//	MessageBox::Show("No Cascade Detected! Check the data holder.");
@@ -401,9 +529,11 @@ namespace ComTex_ALPR {
 	 private: delegate System::Void delegateOfenableStartButton();
 	 private: System::Void enableSartButton(){
 		   startButton1->Enabled = true;
-		   radioButton1->Enabled = true;
-		   radioButton2->Enabled = true;
+		   alprOn->Enabled = true;
+		   alprOff->Enabled = true;
 		   pictureBox1->Invalidate();
+		   onoffLamp->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
+			   static_cast<System::Int32>(static_cast<System::Byte>(0)));
 	}
 
 
