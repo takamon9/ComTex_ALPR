@@ -3,19 +3,12 @@
 
 #include "neuralNetwork.h"
 
-
-//string uname = "root";
-//string password = "taka1974";
-//string ip_address = "http://" + uname + ":" + password + "@192.168.100.50/mjpg/video.mjpg";//Axis
-//string ip_address = "http://" + uname + ":" + password + "@192.168.100.30/-wvhttp-01-/GetOneShot?image_size=640x480&frame_count=0";//canon vb-c300
-//string ip_address = "http://" + uname + ":" + password + "@192.168.100.50/cgi-bin/mjpeg?session_id=[CHANNEL]&buffer=0&prio=high&frame=4";
-
 using namespace System::Windows::Forms;
 
 int loadNueron(){
 
-	cv::String fileName("./dat/neuron.xml"); // cv::String
-	string objName("neuron");  //std::string
+	cv::String fileName("./dat/neuron.xml");
+	std::string objName("neuron");
 
 	neuron = ANN_MLP::Algorithm::load<ANN_MLP>(fileName,objName);
 
@@ -36,9 +29,29 @@ string MarshalString(System::String^ sys_str) {
 	return normal_str;
 }
 
-int accessIpCamera(System::String^ ipAddress, System::String^ user_name, System::String^ pass_word) {
+int accessIpCamera(System::String^ ipAddress, System::String^ user_name, System::String^ pass_word,System::String^ maker) {
+
 	string name_of_ip_address;
-	System::String^ ip_address = gcnew System::String("http://" + user_name + ":" + pass_word + "@" + ipAddress + "/-wvhttp-01-/GetOneShot?image_size=640x480&frame_count=0");
+	System::String^ accsessAddress;
+	System::String^ canon = gcnew System::String("Canon");
+	System::String^ panasonic = gcnew System::String("Panasonic");
+	System::String^ axis = gcnew System::String("Axis");
+	System::String^ sony = gcnew System::String("Sony");
+	
+	if (maker == canon) {
+		accsessAddress = "-wvhttp-01-/GetOneShot?image_size=640x480&frame_count=0";
+	}
+	if (maker == panasonic) {
+		accsessAddress = "cgi-bin/mjpeg?session_id=[CHANNEL]&buffer=0&prio=high&frame=4";
+	}
+	if (maker == axis) {
+		accsessAddress = "mjpg/video.mjpg";
+	}
+	if (maker == sony) {
+		accsessAddress = "mjpg/video.mjpg";
+	}
+
+	System::String^ ip_address = gcnew System::String("http://" + user_name + ":" + pass_word + "@" + ipAddress + "/" + accsessAddress);
 	name_of_ip_address = MarshalString(ip_address);
 	capture.open(name_of_ip_address);
 
@@ -77,45 +90,58 @@ System::String^ cameraSet(int nameOf) {
 		istringstream parts(setting_str);
 		string partWord;
 
-		for(int num = 0; num < 3; num++) {
+		for(int num = 0; num < 5; num++) {
 			parts >> partWord;
 			buffer_of_setting.push_back(partWord);
 
 		}
 
-		System::String^ sys_ip,^ sys_user,^ sys_pass;
-
-	sys_ip = gcnew System::String(buffer_of_setting[0].c_str());
-	sys_user = gcnew System::String(buffer_of_setting[1].c_str());
-	sys_pass = gcnew System::String(buffer_of_setting[2].c_str());
+		System::String ^sys_name,^sys_camera,^sys_ip,^ sys_user,^ sys_pass;
+	
+	sys_name = gcnew System::String(buffer_of_setting[0].c_str());
+	sys_camera = gcnew System::String(buffer_of_setting[1].c_str());
+	sys_ip = gcnew System::String(buffer_of_setting[2].c_str());
+	sys_user = gcnew System::String(buffer_of_setting[3].c_str());
+	sys_pass = gcnew System::String(buffer_of_setting[4].c_str());
 
 //	MessageBox::Show(sys_user);
 
-	if (nameOf == 0) { return sys_ip; }
-	if (nameOf == 1) { return sys_user; }
-	if (nameOf == 2) { return sys_pass;}
+	if (nameOf == 0) { return sys_name; }
+	if (nameOf == 1) { return sys_camera; }
+	if (nameOf == 2) { return sys_ip; }
+	if (nameOf == 3) { return sys_user; }
+	if (nameOf == 4) { return sys_pass;}
 }
 
-void saveSetting(System::String^ ip,System::String^ user,System::String^ pass) {
-
-	string saveIp,saveUser,savePass;
-	saveIp = MarshalString(ip);
-	saveUser = MarshalString(user);
-	savePass = MarshalString(pass);
-
+void saveCameraList(System::String^ text,int rownum,int columnNum){
+	string text_srt;
+	text_srt= MarshalString(text);
+		
 	stringstream save_ss;
-	save_ss << saveIp << " " << saveUser << " " << savePass;
+	save_ss << text_srt;
 	
 	fstream save_fs;
-	save_fs.open("./dat/cameraSet.dat",ios::in |ios::out | ios::trunc);
+
+	if (rownum == 0 && columnNum == 0) {
+		save_fs.open("./dat/cameraSet.dat", ios::out | ios::ate);
+		save_fs.close();
+	}
+
+	save_fs.open("./dat/cameraSet.dat",ios::in | ios::out | ios::app);
 	if (save_fs.is_open() == 0) {
 		MessageBox::Show("Cannot open Setting File.");
 		return;
 	}
 
-	std::string save_str = save_ss.str();
+	std::string save_str = save_ss.str() + " ";
 	const char* ss_char = save_str.c_str();
+
 	save_fs.write(ss_char, save_str.size());
+
+	if (columnNum == 4) {
+		save_fs.write("\n", 1);
+	}
+
 	save_fs.close();
 
 }
@@ -154,7 +180,5 @@ void DrawCVImage(System::Windows::Forms::Control^ control, cv::Mat& colorImage)
 	graphics->DrawImage(b, rect);
 	delete graphics;
 }
-
-
 
 #endif
