@@ -7,15 +7,18 @@ using namespace System::Windows::Forms;
 
 int loadNueron(){
 
-	cv::String fileName("./dat/neuron.xml");
-	std::string objName("neuron");
+	cv::String fileName(".\dat\neuron.xml");
+	cv::String objName("neuron");
+	Algorithm::load<ANN_MLP>(fileName,objName);
+	if (nullptr == Algorithm::load<ANN_MLP>(fileName,objName)) {
+		MessageBox::Show("No file exists in the holder");
+		return 0;
+	}
 
-	neuron = ANN_MLP::Algorithm::load<ANN_MLP>(fileName,objName);
-
-		if (neuron.empty() == true){
-			MessageBox::Show("Check your neuron.xml exists the folder.","Caution",MessageBoxButtons::OK,MessageBoxIcon::Asterisk);
-			return 0;
-		}
+	if (neuron.empty() == true){
+		MessageBox::Show("Check your neuron.xml exists the folder.","Caution",MessageBoxButtons::OK,MessageBoxIcon::Asterisk);
+		return 0;
+	}
 }
 
 string MarshalString(System::String^ sys_str) {
@@ -73,44 +76,35 @@ int accessCascade(){
 	}
 }
 
-System::String^ cameraSet(int nameOf) {
+void cameraSet(vector<string> wordbuf) {
 
-	string fileName = ("./dat/cameraSet.dat");
-	vector<std::string> buffer_of_setting;
 	char setting[256];
 	vector<string> dataSetting;
-	ifstream cameraSet;
+	fstream cameraSet;
+
+	string fileName = ("./dat/cameraSet.dat");
 	cameraSet.open(fileName);
+	if (cameraSet.is_open() == 0) {
+		MessageBox::Show("Sorry, We can not open the file.", "Caution!");
+	}
 
 	string collection;
+	int buffSize = cameraSet.tellg();
+	cameraSet.read(setting, buffSize);
 
-		cameraSet.getline(setting, 255);
+	string setting_str(setting);
+	istringstream parts(setting_str);
+	string partWord;
+		
+	while(!parts.end){
+		parts >> partWord;
+		wordbuf.push_back(partWord);
+	}
 
-		string setting_str(setting);
-		istringstream parts(setting_str);
-		string partWord;
-
-		for(int num = 0; num < 5; num++) {
-			parts >> partWord;
-			buffer_of_setting.push_back(partWord);
-
-		}
-
-		System::String ^sys_name,^sys_camera,^sys_ip,^ sys_user,^ sys_pass;
+	for (int i = 0; i < wordbuf.size(); i++) {
+		wordbuf[i].c_str();
+	}
 	
-	sys_name = gcnew System::String(buffer_of_setting[0].c_str());
-	sys_camera = gcnew System::String(buffer_of_setting[1].c_str());
-	sys_ip = gcnew System::String(buffer_of_setting[2].c_str());
-	sys_user = gcnew System::String(buffer_of_setting[3].c_str());
-	sys_pass = gcnew System::String(buffer_of_setting[4].c_str());
-
-//	MessageBox::Show(sys_user);
-
-	if (nameOf == 0) { return sys_name; }
-	if (nameOf == 1) { return sys_camera; }
-	if (nameOf == 2) { return sys_ip; }
-	if (nameOf == 3) { return sys_user; }
-	if (nameOf == 4) { return sys_pass;}
 }
 
 void saveCameraList(System::String^ text,int rownum,int columnNum){
