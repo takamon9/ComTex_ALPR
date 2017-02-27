@@ -111,24 +111,24 @@ namespace ComTex_ALPR {
 			this->groupBox1->AutoSize = false;
 			this->groupBox1->FlatStyle = FlatStyle::Flat;
 			this->groupBox1->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 12));
-			onoffLamp = gcnew System::Windows::Forms::Label();
+			this->onoffLamp = gcnew System::Windows::Forms::Label();
 			this->groupBox1->Controls->Add(onoffLamp);
-			onoffLamp->Size = System::Drawing::Size(10, 10);
-			onoffLamp->Left = 20;
-			onoffLamp->Top = 20;
-			onoffLamp->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
+			this->onoffLamp->Size = System::Drawing::Size(10, 10);
+			this->onoffLamp->Left = 20;
+			this->onoffLamp->Top = 20;
+			this->onoffLamp->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
 				static_cast<System::Int32>(static_cast<System::Byte>(0)));
-			alprOn = gcnew System::Windows::Forms::RadioButton();
-			alprOn->Text = (L"ALPR ON");
-			alprOn->Top = 15;
-			alprOn->Left = 50;
-			alprOn->Checked = true;
-			alprOn->UseVisualStyleBackColor = true;
-			alprOff = gcnew System::Windows::Forms::RadioButton();
-			alprOff->Text = (L"ALPR OFF");
-			alprOff->Top = 15;
-			alprOff->Left = alprOn->Right + 10;
-			alprOff->UseVisualStyleBackColor = true;
+			this->alprOn = gcnew System::Windows::Forms::RadioButton();
+			this->alprOn->Text = (L"ALPR ON");
+			this->alprOn->Top = 15;
+			this->alprOn->Left = 50;
+			this->alprOn->Checked = true;
+			this->alprOn->UseVisualStyleBackColor = true;
+			this->alprOff = gcnew System::Windows::Forms::RadioButton();
+			this->alprOff->Text = (L"ALPR OFF");
+			this->alprOff->Top = 15;
+			this->alprOff->Left = alprOn->Right + 10;
+			this->alprOff->UseVisualStyleBackColor = true;
 			this->groupBox1->Controls->Add(alprOn);
 			this->groupBox1->Controls->Add(alprOff);
 
@@ -276,7 +276,7 @@ namespace ComTex_ALPR {
 			// 
 			// pictureBox1
 			// 
-			this->pictureBox1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.BackgroundImage")));
+			this->pictureBox1->BackgroundImage = Image::FromFile("./img/imageAlpr.png");
 			this->pictureBox1->Location = System::Drawing::Point(100, 50);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(640, 480);
@@ -347,9 +347,7 @@ namespace ComTex_ALPR {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::WindowFrame;
 			this->ClientSize = System::Drawing::Size(1280, 768);
-	//		this->Controls->Add(this->radioButton2);
 			this->Controls->Add(this->groupBox1);
-		//	this->Controls->Add(this->radioButton1);
 			this->Controls->Add(this->pictureBox3);
 			this->Controls->Add(this->pictureBox2);
 			this->Controls->Add(this->dataGridView1);
@@ -418,17 +416,30 @@ namespace ComTex_ALPR {
 	}
 
 	private: System::Void loadButton_Click(System::Object^  sender, System::EventArgs^  e) {
-		cameraList->Rows->Add(cameraSet(0), cameraSet(1),cameraSet(2), cameraSet(3), cameraSet(4));
-
+	/*	vector<std::string> wordBuff;
+		cameraSet(wordBuff);
+		int rowIndx = wordBuff.size() / 5;
+		this->cameraList->AllowUserToAddRows = true;
+		DataGridViewRow^ addBlank = gcnew System::Windows::Forms::DataGridViewRow();
+		this->cameraList->Rows->Add(addBlank);
+		
+		for (int i = 0; i < rowIndx; i++) {
+			for (int y = 0; y < 5; y++) {
+				int b = 0;
+				System::String^ addBuf = gcnew System::String(wordBuff[b].c_str());
+				cameraList->Rows[i]->Cells[y]->Value = addBuf;
+				b++;
+			}
+		}*/
 	}
 
 	private: System::Void saveButton_Click(System::Object^  sender, System::EventArgs^  e) {
-		int rowCount = cameraList->Rows->Count-1;
-		int columnCount = cameraList->Columns->Count-1;
+		int rowCount = this->cameraList->Rows->Count-1;
+		int columnCount = this->cameraList->Columns->Count-1;
 
 		for (int i = 0; i < rowCount; i++) {
 			for (int y = 0; y < columnCount; y++) {
-				saveCameraList(cameraList->Rows[i]->Cells[y]->Value->ToString(),i,y);
+				saveCameraList(this->cameraList->Rows[i]->Cells[y]->Value->ToString(),i,y);
 			}
 		}
 	}
@@ -436,27 +447,27 @@ namespace ComTex_ALPR {
 
 	private: System::Void startButton1_Click(System::Object^  sender, System::EventArgs^  e) {
 
-			startButton1->Enabled = false;
-			alprOn->Enabled = false;
-			alprOff->Enabled = false;
+			this->startButton1->Enabled = false;
+			this->alprOn->Enabled = false;
+			this->alprOff->Enabled = false;
 
 			accessCascade();
 			createNumberArray();
 			checkStopKey = 1;
 
-			int selectedrowIndex = cameraList->CurrentRow->Index;
-			System::String^ camMaker = cameraList->Rows[selectedrowIndex]->Cells[1]->Value->ToString();
-			System::String^ ipAd = cameraList->Rows[selectedrowIndex]->Cells[2]->Value->ToString();
-			System::String^ userId = cameraList->Rows[selectedrowIndex]->Cells[3]->Value->ToString();
-			System::String^ pass = cameraList->Rows[selectedrowIndex]->Cells[4]->Value->ToString();
+			int selectedrowIndex = this->cameraList->CurrentRow->Index;
+			System::String^ camMaker = this->cameraList->Rows[selectedrowIndex]->Cells[1]->Value->ToString();
+			System::String^ ipAd = this->cameraList->Rows[selectedrowIndex]->Cells[2]->Value->ToString();
+			System::String^ userId = this-> cameraList->Rows[selectedrowIndex]->Cells[3]->Value->ToString();
+			System::String^ pass = this->cameraList->Rows[selectedrowIndex]->Cells[4]->Value->ToString();
 
 			accessIpCamera(ipAd,userId,pass,camMaker);
 			loadNueron();
 
 			if (checkStopKey == 0) {
-				startButton1->Enabled = true;
-				alprOn->Enabled = true;
-				alprOff->Enabled = true;
+				this->startButton1->Enabled = true;
+				this->alprOn->Enabled = true;
+				this->alprOff->Enabled = true;
 				return;
 			}
 
@@ -468,7 +479,7 @@ namespace ComTex_ALPR {
 
 	private: System::Void processThread(){
 		if (this->alprOn->Checked == true) {
-			onoffLamp->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			this->onoffLamp->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
 				static_cast<System::Int32>(static_cast<System::Byte>(0)));
 		}
 		while (checkStopKey == 1) {
@@ -528,11 +539,11 @@ namespace ComTex_ALPR {
 
 	 private: delegate System::Void delegateOfenableStartButton();
 	 private: System::Void enableSartButton(){
-		   startButton1->Enabled = true;
-		   alprOn->Enabled = true;
-		   alprOff->Enabled = true;
-		   pictureBox1->Invalidate();
-		   onoffLamp->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
+		   this->startButton1->Enabled = true;
+		   this->alprOn->Enabled = true;
+		   this->alprOff->Enabled = true;
+		   this->pictureBox1->Invalidate();
+		   this->onoffLamp->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
 			   static_cast<System::Int32>(static_cast<System::Byte>(0)));
 	}
 
