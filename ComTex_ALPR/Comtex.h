@@ -96,8 +96,12 @@ namespace ComTex_ALPR {
 			this->cameraMaker = (gcnew System::Windows::Forms::ComboBox());
 			this->addRow = (gcnew System::Windows::Forms::Button());
 			this->deleteRow = (gcnew System::Windows::Forms::Button());
+			this->alprOn = (gcnew System::Windows::Forms::RadioButton());
+			this->alprOff = (gcnew System::Windows::Forms::RadioButton());
+			this->onoffLamp = (gcnew System::Windows::Forms::Label());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->cameraList))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->BeginInit();
 			this->SuspendLayout();
@@ -111,27 +115,20 @@ namespace ComTex_ALPR {
 			this->groupBox1->AutoSize = false;
 			this->groupBox1->FlatStyle = FlatStyle::Flat;
 			this->groupBox1->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 12));
-			this->onoffLamp = gcnew System::Windows::Forms::Label();
-			this->groupBox1->Controls->Add(onoffLamp);
 			this->onoffLamp->Size = System::Drawing::Size(10, 10);
 			this->onoffLamp->Left = 20;
 			this->onoffLamp->Top = 20;
 			this->onoffLamp->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
 				static_cast<System::Int32>(static_cast<System::Byte>(0)));
-			this->alprOn = gcnew System::Windows::Forms::RadioButton();
 			this->alprOn->Text = (L"ALPR ON");
 			this->alprOn->Top = 15;
 			this->alprOn->Left = 50;
 			this->alprOn->Checked = true;
 			this->alprOn->UseVisualStyleBackColor = true;
-			this->alprOff = gcnew System::Windows::Forms::RadioButton();
 			this->alprOff->Text = (L"ALPR OFF");
 			this->alprOff->Top = 15;
 			this->alprOff->Left = alprOn->Right + 10;
 			this->alprOff->UseVisualStyleBackColor = true;
-			this->groupBox1->Controls->Add(alprOn);
-			this->groupBox1->Controls->Add(alprOff);
-
 			// 
 			// startButton1
 			// 
@@ -214,7 +211,7 @@ namespace ComTex_ALPR {
 			this->ipAddress->Text = "IP Address";
 			this->ipAddress->Location = System::Drawing::Point(320, 540);
 			this->ipAddress->Size = System::Drawing::Size(140, 15);
-			this->ipAddress->Font = (gcnew System::Drawing::Font(L"MS UI Gothic",11));
+			this->ipAddress->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 11));
 			//
 			// userName
 			//
@@ -322,7 +319,6 @@ namespace ComTex_ALPR {
 			this->cameraList->AllowUserToAddRows = true;
 			this->cameraList->Columns[0]->SortMode = DataGridViewColumnSortMode::Automatic;
 			this->cameraList->Sort(cameraList->Columns[0], System::ComponentModel::ListSortDirection::Descending);
-
 			// pictureBox2
 			// 
 			this->pictureBox2->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
@@ -365,11 +361,15 @@ namespace ComTex_ALPR {
 			this->Controls->Add(this->cameraMaker);
 			this->Controls->Add(this->addRow);
 			this->Controls->Add(this->deleteRow);
+			this->groupBox1->Controls->Add(alprOn);
+			this->groupBox1->Controls->Add(alprOff);
+			this->groupBox1->Controls->Add(onoffLamp);
 			this->Name = L"Comtex";
 			this->Text = L"Comtex";
 			this->Load += gcnew System::EventHandler(this, &Comtex::Comtex_Load);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->cameraList))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->EndInit();
 			this->ResumeLayout(false);
@@ -379,7 +379,7 @@ namespace ComTex_ALPR {
 #pragma endregion
 
 	private: System::Void Comtex_Load(System::Object^  sender, System::EventArgs^  e) {
-
+		loadCameraSet(cameraList);
 	}
 
 	private: System::Void addRow_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -388,12 +388,12 @@ namespace ComTex_ALPR {
 		System::String^ ipAddress = this->ipAddress->Text;
 		System::String^ userID = this->userName->Text;
 		System::String^ pass = this->password->Text;
-		this->cameraList->Rows->Add(camName,manfName,ipAddress,userID,pass);
+		this->cameraList->Rows->Add(camName, manfName, ipAddress, userID, pass);
 	}
 
 	private: System::Void deleteRow_Click(System::Object^  sender, System::EventArgs^  e) {
 		int selectRows = this->cameraList->SelectedRows[0]->Index;
-		
+
 		if (selectRows == 0) {
 			return;
 		}
@@ -401,7 +401,7 @@ namespace ComTex_ALPR {
 			return;
 		}
 
-		this->cameraList->Rows->RemoveAt(selectRows-1);
+		this->cameraList->Rows->RemoveAt(selectRows - 1);
 	}
 
 	private: System::Void exitButton_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -410,74 +410,63 @@ namespace ComTex_ALPR {
 		if (MessageBox::Show("Are you sure you want to close the program?", caption, MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::No) {
 			return;
 		}
-		
+
 		checkStopKey = 0;
 		this->Close();
 	}
 
 	private: System::Void loadButton_Click(System::Object^  sender, System::EventArgs^  e) {
-	/*	vector<std::string> wordBuff;
-		cameraSet(wordBuff);
-		int rowIndx = wordBuff.size() / 5;
-		this->cameraList->AllowUserToAddRows = true;
-		DataGridViewRow^ addBlank = gcnew System::Windows::Forms::DataGridViewRow();
-		this->cameraList->Rows->Add(addBlank);
-		
-		for (int i = 0; i < rowIndx; i++) {
-			for (int y = 0; y < 5; y++) {
-				int b = 0;
-				System::String^ addBuf = gcnew System::String(wordBuff[b].c_str());
-				cameraList->Rows[i]->Cells[y]->Value = addBuf;
-				b++;
-			}
-		}*/
+		vector<std::string> wordBuff;
+		loadCameraSet(cameraList);
+
 	}
 
 	private: System::Void saveButton_Click(System::Object^  sender, System::EventArgs^  e) {
-		int rowCount = this->cameraList->Rows->Count-1;
-		int columnCount = this->cameraList->Columns->Count-1;
+		int rowCount = this->cameraList->Rows->Count - 1;
+		int columnCount = this->cameraList->Columns->Count - 1;
 
 		for (int i = 0; i < rowCount; i++) {
 			for (int y = 0; y < columnCount; y++) {
-				saveCameraList(this->cameraList->Rows[i]->Cells[y]->Value->ToString(),i,y);
+				saveCameraList(this->cameraList->Rows[i]->Cells[y]->Value->ToString(), i, y);
 			}
 		}
 	}
-		
+
 
 	private: System::Void startButton1_Click(System::Object^  sender, System::EventArgs^  e) {
 
-			this->startButton1->Enabled = false;
-			this->alprOn->Enabled = false;
-			this->alprOff->Enabled = false;
+		this->startButton1->Enabled = false;
+		this->alprOn->Enabled = false;
+		this->alprOff->Enabled = false;
+		this->cameraList->Rows[0]->Selected = true;
 
-			accessCascade();
-			createNumberArray();
-			checkStopKey = 1;
+		accessCascade();
+		createNumberArray();
+		checkStopKey = 1;
 
-			int selectedrowIndex = this->cameraList->CurrentRow->Index;
-			System::String^ camMaker = this->cameraList->Rows[selectedrowIndex]->Cells[1]->Value->ToString();
-			System::String^ ipAd = this->cameraList->Rows[selectedrowIndex]->Cells[2]->Value->ToString();
-			System::String^ userId = this-> cameraList->Rows[selectedrowIndex]->Cells[3]->Value->ToString();
-			System::String^ pass = this->cameraList->Rows[selectedrowIndex]->Cells[4]->Value->ToString();
+		int selectedrowIndex = this->cameraList->CurrentRow->Index;
+		System::String^ camMaker = this->cameraList->Rows[selectedrowIndex]->Cells[1]->Value->ToString();
+		System::String^ ipAd = this->cameraList->Rows[selectedrowIndex]->Cells[2]->Value->ToString();
+		System::String^ userId = this->cameraList->Rows[selectedrowIndex]->Cells[3]->Value->ToString();
+		System::String^ pass = this->cameraList->Rows[selectedrowIndex]->Cells[4]->Value->ToString();
 
-			accessIpCamera(ipAd,userId,pass,camMaker);
-			loadNueron();
+		accessIpCamera(ipAd, userId, pass, camMaker);
+		loadNueron();
 
-			if (checkStopKey == 0) {
-				this->startButton1->Enabled = true;
-				this->alprOn->Enabled = true;
-				this->alprOff->Enabled = true;
-				return;
-			}
+		if (checkStopKey == 0) {
+			this->startButton1->Enabled = true;
+			this->alprOn->Enabled = true;
+			this->alprOff->Enabled = true;
+			return;
+		}
 
-			//System::Windows::Forms::DataGridView^ gridName = this->dataGridView1;
-			Thread ^subThread = gcnew Thread(gcnew ThreadStart(this, &Comtex::processThread));
-			subThread->IsBackground;
-			subThread->Start();
+		//System::Windows::Forms::DataGridView^ gridName = this->dataGridView1;
+		Thread ^subThread = gcnew Thread(gcnew ThreadStart(this, &Comtex::processThread));
+		subThread->IsBackground;
+		subThread->Start();
 	}
 
-	private: System::Void processThread(){
+	private: System::Void processThread() {
 		if (this->alprOn->Checked == true) {
 			this->onoffLamp->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
 				static_cast<System::Int32>(static_cast<System::Byte>(0)));
@@ -490,8 +479,8 @@ namespace ComTex_ALPR {
 			if (this->alprOn->Checked) {
 				general700_cascade.detectMultiScale(gray, commPlate, 1.3, 5);
 				if (commPlate.empty()) {
-				//	MessageBox::Show("No Cascade Detected! Check the data holder.");
-				//	break;
+					//	MessageBox::Show("No Cascade Detected! Check the data holder.");
+					//	break;
 				}
 				else {
 					processNeuralNetwork();
@@ -504,57 +493,55 @@ namespace ComTex_ALPR {
 		}
 		BeginInvoke(gcnew delegateOfenableStartButton(this, &Comtex::enableSartButton));
 
-}
+	}
 
-	 private: delegate System::Void conditionStopDelegate();
-	 private: System::Void stopFunction(){
-		 this->dataGridView1->AutoResizeColumns(DataGridViewAutoSizeColumnsMode::AllCells);
+	private: delegate System::Void conditionStopDelegate();
+	private: System::Void stopFunction() {
+		this->dataGridView1->AutoResizeColumns(DataGridViewAutoSizeColumnsMode::AllCells);
 
 	}
 
 	private: delegate System::Void delegate_of_gridView();
-	private: System::Void gridView(){
-			time_t timer = time(0);
-			struct tm *timeStruct = localtime(&timer);
-			int year = timeStruct->tm_year + 1900;
-			int month = timeStruct->tm_mon + 1;
-			int day = timeStruct->tm_mday;
-			int hour = timeStruct->tm_hour;
-			int minute = timeStruct->tm_min;
-			int second = timeStruct->tm_sec;
-			stringstream dateSS, intSS;
-			dateSS << year << "/" << setw(2) << setfill('0') << month << "/" << setw(2) << setfill('0') << day << "," << setw(2) << setfill('0') << hour << ";" << setw(2) << setfill('0') << minute << ":" << setw(2) << setfill('0') << second;
-			string getDate = dateSS.str();
-			System::String^ timeStamp = gcnew System::String(getDate.c_str());
-			intSS << num[3] << num[2] << num[1] << num[0];
-			string integerSS = intSS.str();
-			System::String^ numberN = gcnew System::String(integerSS.c_str());
-			cli::array<System::String^>^ rows0 = gcnew cli::array<System::String^>{timeStamp, numberN};
-			DataGridViewRowCollection^ rows = this->dataGridView1->Rows;
-			rows->Add(rows0);
-			if (rows->Count == 30){
-				rows->RemoveAt(0);
-			}
-	 }
+	private: System::Void gridView() {
+		time_t timer = time(0);
+		struct tm *timeStruct = localtime(&timer);
+		int year = timeStruct->tm_year + 1900;
+		int month = timeStruct->tm_mon + 1;
+		int day = timeStruct->tm_mday;
+		int hour = timeStruct->tm_hour;
+		int minute = timeStruct->tm_min;
+		int second = timeStruct->tm_sec;
+		stringstream dateSS, intSS;
+		dateSS << year << "/" << setw(2) << setfill('0') << month << "/" << setw(2) << setfill('0') << day << "," << setw(2) << setfill('0') << hour << ";" << setw(2) << setfill('0') << minute << ":" << setw(2) << setfill('0') << second;
+		string getDate = dateSS.str();
+		System::String^ timeStamp = gcnew System::String(getDate.c_str());
+		intSS << num[3] << num[2] << num[1] << num[0];
+		string integerSS = intSS.str();
+		System::String^ numberN = gcnew System::String(integerSS.c_str());
+		cli::array<System::String^>^ rows0 = gcnew cli::array<System::String^>{timeStamp, numberN};
+		DataGridViewRowCollection^ rows = this->dataGridView1->Rows;
+		rows->Add(rows0);
+		if (rows->Count == 30) {
+			rows->RemoveAt(0);
+		}
+	}
 
-	 private: delegate System::Void delegateOfenableStartButton();
-	 private: System::Void enableSartButton(){
-		   this->startButton1->Enabled = true;
-		   this->alprOn->Enabled = true;
-		   this->alprOff->Enabled = true;
-		   this->pictureBox1->Invalidate();
-		   this->onoffLamp->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
-			   static_cast<System::Int32>(static_cast<System::Byte>(0)));
+	private: delegate System::Void delegateOfenableStartButton();
+	private: System::Void enableSartButton() {
+		this->startButton1->Enabled = true;
+		this->alprOn->Enabled = true;
+		this->alprOff->Enabled = true;
+		this->pictureBox1->Invalidate();
+		this->onoffLamp->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));
 	}
 
 
 	private: System::Void stopButton1_Click(System::Object^  sender, System::EventArgs^  e) {
 		checkStopKey = 0;
-	
+
 	}
 
 
-	private: System::Void radioButton1_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
-}
-};
+	};
 }
