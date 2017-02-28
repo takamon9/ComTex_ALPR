@@ -5,15 +5,15 @@
 
 using namespace System::Windows::Forms;
 
-int loadNueron(){
+int loadNueron() {
 
 	cv::String fileName(".\dat\neuron.xml");
 	cv::String objName("neuron");
 
-	neuron = ANN_MLP::load<ANN_MLP>(fileName,objName);
+	neuron = ANN_MLP::load<ANN_MLP>(fileName, objName);
 
-	if (neuron.empty() == true){
-		MessageBox::Show("Check your neuron.xml exists the folder.","Caution",MessageBoxButtons::OK,MessageBoxIcon::Asterisk);
+	if (neuron.empty() == true) {
+		MessageBox::Show("Check your neuron.xml exists the folder.", "Caution", MessageBoxButtons::OK, MessageBoxIcon::Asterisk);
 		return 0;
 	}
 }
@@ -29,7 +29,7 @@ string MarshalString(System::String^ sys_str) {
 	return normal_str;
 }
 
-int accessIpCamera(System::String^ ipAddress, System::String^ user_name, System::String^ pass_word,System::String^ maker) {
+int accessIpCamera(System::String^ ipAddress, System::String^ user_name, System::String^ pass_word, System::String^ maker) {
 
 	string name_of_ip_address;
 	System::String^ accsessAddress;
@@ -37,7 +37,7 @@ int accessIpCamera(System::String^ ipAddress, System::String^ user_name, System:
 	System::String^ panasonic = gcnew System::String("Panasonic");
 	System::String^ axis = gcnew System::String("Axis");
 	System::String^ sony = gcnew System::String("Sony");
-	
+
 	if (maker == canon) {
 		accsessAddress = "-wvhttp-01-/GetOneShot?image_size=640x480&frame_count=0";
 	}
@@ -63,19 +63,18 @@ int accessIpCamera(System::String^ ipAddress, System::String^ user_name, System:
 	}
 }
 
-int accessCascade(){
+int accessCascade() {
 
 	if (!general700_cascade.load("./cascade/700_cascade.xml"))
 	{
-		MessageBox::Show("cascade.load failed!! put the xml file into this project holder\n","Caution",MessageBoxButtons::OK,MessageBoxIcon::Asterisk);
+		MessageBox::Show("cascade.load failed!! put the xml file into this project holder\n", "Caution", MessageBoxButtons::OK, MessageBoxIcon::Asterisk);
 		system("pause");
 		return -1;
 	}
 }
 
-void cameraSet(vector<string> wordbuf) {
+void loadCameraSet(System::Windows::Forms::DataGridView^ formCameraList) {
 
-	char setting[256];
 	vector<string> dataSetting;
 	fstream cameraSet;
 
@@ -85,32 +84,36 @@ void cameraSet(vector<string> wordbuf) {
 		MessageBox::Show("Sorry, We can not open the file.", "Caution!");
 	}
 
-	string collection;
-	int buffSize = cameraSet.tellg();
-	cameraSet.read(setting, buffSize);
+	string setting;
+	int lineCount = 0;
+	formCameraList->Rows->Clear();
 
-	string setting_str(setting);
-	istringstream parts(setting_str);
-	string partWord;
-		
-	while(!parts.end){
-		parts >> partWord;
-		wordbuf.push_back(partWord);
-	}
+	while (cameraSet.eof() == false) {
+		formCameraList->Rows->Add(1);
+		getline(cameraSet, setting);
+		istringstream parts(setting);
+		string words;
 
-	for (int i = 0; i < wordbuf.size(); i++) {
-		wordbuf[i].c_str();
+		for (int i = 0; i < 5; i++) {
+
+			parts >> words;
+			System::String^ sys_parts = gcnew System::String(words.c_str());
+
+			formCameraList->Rows[lineCount]->Cells[i]->Value = sys_parts;
+
+		}
+		lineCount++;
 	}
-	
+	formCameraList->Rows[0]->Selected = true;
 }
 
-void saveCameraList(System::String^ text,int rownum,int columnNum){
+void saveCameraList(System::String^ text, int rownum, int columnNum) {
 	string text_srt;
-	text_srt= MarshalString(text);
-		
+	text_srt = MarshalString(text);
+
 	stringstream save_ss;
 	save_ss << text_srt;
-	
+
 	fstream save_fs;
 
 	if (rownum == 0 && columnNum == 0) {
@@ -118,7 +121,7 @@ void saveCameraList(System::String^ text,int rownum,int columnNum){
 		save_fs.close();
 	}
 
-	save_fs.open("./dat/cameraSet.dat",ios::in | ios::out | ios::app);
+	save_fs.open("./dat/cameraSet.dat", ios::in | ios::out | ios::app);
 	if (save_fs.is_open() == 0) {
 		MessageBox::Show("Cannot open Setting File.");
 		return;
@@ -138,7 +141,7 @@ void saveCameraList(System::String^ text,int rownum,int columnNum){
 }
 
 
-void createNumberArray(){
+void createNumberArray() {
 	for (int j = 0; j < 4; j++) {
 
 		number[j].create(numArrWidth, numArrHight, CV_8SC3);
@@ -147,7 +150,7 @@ void createNumberArray(){
 }
 
 
-int readOriginal(){
+int readOriginal() {
 	time_t t;
 
 	if (!capture.read(original)) {
@@ -156,7 +159,7 @@ int readOriginal(){
 
 	image = original.clone();
 	cvtColor(original, gray, CV_BGR2GRAY);
-	cvtColor(original, matrix32s,CV_32S);
+	cvtColor(original, matrix32s, CV_32S);
 
 }
 
