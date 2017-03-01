@@ -14,7 +14,7 @@ int loadNueron() {
 
 	if (neuron.empty() == true) {
 		MessageBox::Show("Check your neuron.xml exists the folder.", "Caution", MessageBoxButtons::OK, MessageBoxIcon::Asterisk);
-		return 0;
+		return -1;
 	}
 }
 
@@ -42,7 +42,7 @@ int accessIpCamera(System::String^ ipAddress, System::String^ user_name, System:
 		accsessAddress = "-wvhttp-01-/GetOneShot?image_size=640x480&frame_count=0";
 	}
 	if (maker == panasonic) {
-		accsessAddress = "cgi-bin/mjpeg?session_id=[CHANNEL]&buffer=0&prio=high&frame=4";
+		accsessAddress = "nphMotionjpeg?Resolution=640x480&Quality=Standard";
 	}
 	if (maker == axis) {
 		accsessAddress = "mjpg/video.mjpg";
@@ -104,7 +104,6 @@ void loadCameraSet(System::Windows::Forms::DataGridView^ formCameraList) {
 		}
 		lineCount++;
 	}
-	formCameraList->Rows[0]->Selected = true;
 }
 
 void saveCameraList(System::String^ text, int rownum, int columnNum) {
@@ -123,7 +122,7 @@ void saveCameraList(System::String^ text, int rownum, int columnNum) {
 
 	save_fs.open("./dat/cameraSet.dat", ios::in | ios::out | ios::app);
 	if (save_fs.is_open() == 0) {
-		MessageBox::Show("Cannot open Setting File.");
+		MessageBox::Show("Cannot open the Setting File.");
 		return;
 	}
 
