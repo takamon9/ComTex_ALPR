@@ -42,7 +42,7 @@ int accessIpCamera(System::String^ ipAddress, System::String^ user_name, System:
 		accsessAddress = "-wvhttp-01-/GetOneShot?image_size=640x480&frame_count=0";
 	}
 	if (maker == panasonic) {
-		accsessAddress = "nphMotionjpeg?Resolution=640x480&Quality=Standard";
+		accsessAddress = "nphMotionJpeg?Resolution=640x480&Quality=Standard";
 	}
 	if (maker == axis) {
 		accsessAddress = "mjpg/video.mjpg";
