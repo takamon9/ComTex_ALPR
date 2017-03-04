@@ -469,6 +469,12 @@ namespace ComTex_ALPR {
 			return;
 		}
 
+		numInt[0] = NULL;
+		numInt[1] = NULL;
+		numInt[2] = NULL;
+		numInt[3] = NULL;
+		numInt[4] = NULL;
+
 		//System::Windows::Forms::DataGridView^ gridName = this->dataGridView1;
 		Thread ^subThread = gcnew Thread(gcnew ThreadStart(this, &Comtex::processThread));
 		subThread->IsBackground;
@@ -525,6 +531,7 @@ namespace ComTex_ALPR {
 		int hour = timeStruct->tm_hour;
 		int minute = timeStruct->tm_min;
 		int second = timeStruct->tm_sec;
+
 		stringstream dateSS, intSS;
 		dateSS << year << "/" << setw(2) << setfill('0') << month << "/" << setw(2) << setfill('0') << day << "," << setw(2) << setfill('0') << hour << ";" << setw(2) << setfill('0') << minute << ":" << setw(2) << setfill('0') << second;
 		string getDate = dateSS.str();
