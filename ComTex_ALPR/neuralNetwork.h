@@ -2,7 +2,7 @@
 #define __NEURALNETWORK_H_INCLUDED__
 
 #include <iostream>
-#include <opencv2\opencv.hpp>
+#include <opencv2/opencv.hpp>
 #include <fstream>
 #include <vector>
 #include <time.h>
@@ -11,13 +11,11 @@
 #include <algorithm>
 #include <string>
 
-
-
 using namespace cv;
 using namespace std;
 using namespace ml;
 
-int num[5] = { num[0], num[1], num[2], num[3], num[4] };
+int numInt[5] = { numInt[0], numInt[1], numInt[2], numInt[3], numInt[4] };
 
 
 char fname[100];
@@ -36,7 +34,7 @@ Mat binaryNP, cannyNP;
 Mat resizedMat = Mat(200, 100, CV_32S);
 
 int checkStopKey = 0;
-int detectedNum[] = { 0, 1, 2, 3, 4, 5 };
+//int detectedNum[] = { 0, 1, 2, 3, 4, 5 };
 
 Mat neuralMat;
 Mat teacher;
@@ -44,9 +42,7 @@ Mat teacher;
 vector<Rect> commPlate;
 VideoCapture capture;
 CascadeClassifier general700_cascade;
-
 Ptr<ANN_MLP> neuron;
-
 
 //time_t t;
 
@@ -69,7 +65,6 @@ struct sort_struct {
 	Mat numRect;
 };
 
-
 void matrixArray(Mat matrixName, string fileN)
 {
 	fstream inFile;
@@ -90,17 +85,14 @@ void matrixArray(Mat matrixName, string fileN)
 	inFile.close();
 }
 
-
 void processNeuralNetwork()
-
 {
 
-	num[0] = 0;
-	num[1] = 0;
-	num[2] = 0;
-	num[3] = 0;
-	num[4] = 0;
-
+	numInt[0] = 0;
+	numInt[1] = 0;
+	numInt[2] = 0;
+	numInt[3] = 0;
+	numInt[4] = 0;
 
 	for (int i = 0; i < commPlate.size(); i++)
 	{
@@ -138,7 +130,7 @@ void processNeuralNetwork()
 		sort_struct sortA[10];
 
 		vector<sort_struct> sortArray;
-		
+
 		for (int i = 0; i < contours.size(); i++)
 		{
 			pointArea[i] = boundingRect(contours[i]);
@@ -151,30 +143,31 @@ void processNeuralNetwork()
 				wideArea.y -= 3;
 				wideArea.height += 6;
 
-				if (wideArea.x < 0 || wideArea.y < 0 || wideArea.x + wideArea.width > contoursMat.cols || wideArea.y + wideArea.height > contoursMat.rows){
+				if (wideArea.x < 0 || wideArea.y < 0 || wideArea.x + wideArea.width > contoursMat.cols || wideArea.y + wideArea.height > contoursMat.rows) {
 					wideArea.x += 3;
 					wideArea.width -= 6;
 					wideArea.y += 3;
 					wideArea.height -= 6;
 				}
 
-				if (contourRatio > 0.11 && contourRatio < 0.22 && pointArea[i].height > 30 && pointArea[i].height < 55){
-					wideArea.x -= wideArea.width/2;
+				if (contourRatio > 0.11 && contourRatio < 0.22 && pointArea[i].height > 30 && pointArea[i].height < 55) {
+					wideArea.x -= wideArea.width / 2;
 					wideArea.width += wideArea.width;
-					if (wideArea.x < 0 || wideArea.y < 0 || wideArea.x + wideArea.width > contoursMat.cols || wideArea.y + wideArea.height > contoursMat.rows){
+					if (wideArea.x < 0 || wideArea.y < 0 || wideArea.x + wideArea.width > contoursMat.cols || wideArea.y + wideArea.height > contoursMat.rows) {
 						sortA[count] = { pointArea[i].x, Mat(binaryNP, pointArea[i]) };
 
-					}else{
+					}
+					else {
 						rectangle(contoursMat, wideArea, Scalar(0, 255, 0), 1);
 						sortA[count] = { pointArea[i].x, Mat(binaryNP, wideArea) };
 					}
 				}
 
-				else{
+				else {
 					rectangle(contoursMat, wideArea, Scalar(0, 255, 0), 1);
 					sortA[count] = { pointArea[i].x, Mat(binaryNP, wideArea) };
 				}
-				
+
 				sortArray.push_back(sortA[count]);
 				count++;
 			}
@@ -207,8 +200,8 @@ void processNeuralNetwork()
 
 			Mat binaryNumMat = Mat(cv::Size(N_INPUT, 1), CV_32F);
 
-			for (int y = 0; y < 1; y++){
-				for (int x = 0; x < N_INPUT; x++){
+			for (int y = 0; y < 1; y++) {
+				for (int x = 0; x < N_INPUT; x++) {
 					char moji;
 					int number;
 
@@ -230,19 +223,16 @@ void processNeuralNetwork()
 			ss << maxLocationResult.x;
 
 			detectedNumber = ss.str();
-			detectedNum[i] = maxLocationResult.x;
-			num[i] = maxLocationResult.x;
-			putText(number[i], detectedNumber, cv::Point(point4, numHight), CV_FONT_HERSHEY_SIMPLEX, numScale, Scalar(0, 255, 0), numThik, 8);
+		//	detectedNum[i] = maxLocationResult.x;
+			numInt[i] = maxLocationResult.x;
+			number[i] = imread("./img/plate.png");
 
+			putText(number[i], detectedNumber, cv::Point(point4, numHight), CV_FONT_HERSHEY_SIMPLEX, numScale, Scalar(128, 128, 0), numThik, 8);
 		}
-
 		vector<Mat> number_array{ number[3], number[2], number[1], number[0] };
 		hconcat(number_array, concatnated);
-
 	}
-	
+
 }
-
-
 
 #endif
