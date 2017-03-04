@@ -15,8 +15,7 @@ using namespace cv;
 using namespace std;
 using namespace ml;
 
-int numInt[5] = { numInt[0], numInt[1], numInt[2], numInt[3], numInt[4] };
-
+int numInt[5] = { numInt[0], numInt[1], numInt[2], numInt[3],numInt[4]};
 
 char fname[100];
 Scalar colorNum(0, 255, 0);
@@ -87,12 +86,6 @@ void matrixArray(Mat matrixName, string fileN)
 
 void processNeuralNetwork()
 {
-
-	numInt[0] = 0;
-	numInt[1] = 0;
-	numInt[2] = 0;
-	numInt[3] = 0;
-	numInt[4] = 0;
 
 	for (int i = 0; i < commPlate.size(); i++)
 	{
