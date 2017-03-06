@@ -1,5 +1,5 @@
 #pragma once
-#include "preFunction.h"
+#include "neuralNetwork.h"
 
 
 namespace ComTex_ALPR {
@@ -53,7 +53,7 @@ namespace ComTex_ALPR {
 	private: TextBox^ password;
 	private: ComboBox^ cameraMaker;
 	private: TextBox^ cameraName;
-//	private: System::Windows::Forms::DataGridViewCheckBoxColumn^ checkBoxColumn;
+			 //	private: System::Windows::Forms::DataGridViewCheckBoxColumn^ checkBoxColumn;
 	protected:
 
 	protected:
@@ -100,7 +100,7 @@ namespace ComTex_ALPR {
 			this->alprOn = (gcnew System::Windows::Forms::RadioButton());
 			this->alprOff = (gcnew System::Windows::Forms::RadioButton());
 			this->onoffLamp = (gcnew System::Windows::Forms::Label());
-		//	this->checkBoxColumn = (gcnew System::Windows::Forms::DataGridViewCheckBoxColumn());
+			//	this->checkBoxColumn = (gcnew System::Windows::Forms::DataGridViewCheckBoxColumn());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->cameraList))->BeginInit();
@@ -315,12 +315,12 @@ namespace ComTex_ALPR {
 			this->cameraList->AutoSizeRowsMode = DataGridViewAutoSizeRowsMode::DisplayedCellsExceptHeaders;
 			this->cameraList->MultiSelect = false;
 			this->cameraList->ColumnCount = 6;
-		//	this->checkBoxColumn->Width = 25;
-		//	this->checkBoxColumn->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleCenter;
-		//	this->cameraList->Columns->Insert(0,checkBoxColumn);
-		//	this->checkBoxColumn->TrueValue = 1;
-		//	this->checkBoxColumn->FalseValue = 0;
-		//	this->cameraList->Columns[0]->Name = "C";
+			//	this->checkBoxColumn->Width = 25;
+			//	this->checkBoxColumn->DefaultCellStyle->Alignment = DataGridViewContentAlignment::MiddleCenter;
+			//	this->cameraList->Columns->Insert(0,checkBoxColumn);
+			//	this->checkBoxColumn->TrueValue = 1;
+			//	this->checkBoxColumn->FalseValue = 0;
+			//	this->cameraList->Columns[0]->Name = "C";
 			this->cameraList->Columns[0]->Name = "Camera Name";
 			this->cameraList->Columns[0]->Width = 90;
 			this->cameraList->Columns[1]->Name = "Maker";
@@ -412,13 +412,13 @@ namespace ComTex_ALPR {
 	private: System::Void deleteRow_Click(System::Object^  sender, System::EventArgs^  e) {
 
 		int selectRows = this->cameraList->SelectedRows[0]->Index;
-		int oldestRow = this->cameraList->Rows->Count-1;
+		int oldestRow = this->cameraList->Rows->Count - 1;
 
 		if (selectRows == oldestRow) {
 			MessageBox::Show("Sorry,We cannot delete this row");
 			return;
 		}
-	
+
 		if (MessageBox::Show("Are you sure you want to delete the Row?", "Warning!", MessageBoxButtons::OKCancel, MessageBoxIcon::Warning) == System::Windows::Forms::DialogResult::Cancel) {
 			return;
 		}
@@ -427,13 +427,16 @@ namespace ComTex_ALPR {
 	}
 
 	private: System::Void exitButton_Click(System::Object^  sender, System::EventArgs^  e) {
+
+		checkStopKey = 0;
 		int anserValue;
+
 		System::String^ caption = "Warning!";
 		if (MessageBox::Show("Are you sure you want to close the program?", caption, MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::No) {
 			return;
 		}
 
-		checkStopKey = 0;
+
 		this->Close();
 	}
 
@@ -452,7 +455,7 @@ namespace ComTex_ALPR {
 		this->startButton1->Enabled = false;
 		this->alprOn->Enabled = false;
 		this->alprOff->Enabled = false;
-		
+
 		accessCascade();
 		createNumberArray();
 		checkStopKey = 1;
@@ -469,12 +472,6 @@ namespace ComTex_ALPR {
 			return;
 		}
 
-		numInt[0] = NULL;
-		numInt[1] = NULL;
-		numInt[2] = NULL;
-		numInt[3] = NULL;
-		numInt[4] = NULL;
-
 		//System::Windows::Forms::DataGridView^ gridName = this->dataGridView1;
 		Thread ^subThread = gcnew Thread(gcnew ThreadStart(this, &Comtex::processThread));
 		subThread->IsBackground;
@@ -487,22 +484,21 @@ namespace ComTex_ALPR {
 				static_cast<System::Int32>(static_cast<System::Byte>(0)));
 		}
 		while (checkStopKey == 1) {
-
 			readOriginal();
 			DrawCVImage(pictureBox1, matrix32s);
 
 			if (this->alprOn->Checked) {
 				general700_cascade.detectMultiScale(gray, commPlate, 1.3, 5);
 				if (general700_cascade.empty()) {
-						MessageBox::Show("No Cascade file detected! Check the data holder.");
-						break;
+					MessageBox::Show("No Cascade file detected! Check the data holder.");
+					break;
 				}
 				else {
-					processNeuralNetwork();
-					BeginInvoke(gcnew delegate_of_gridView(this, &Comtex::gridView));
-					DrawCVImage(pictureBox2, contoursMat);
-					DrawCVImage(pictureBox3, concatnated);
+					if (!commPlate.empty()) {
+						BeginInvoke(gcnew delegate_of_gridView(this, &Comtex::gridView));
+					}
 				}
+
 				BeginInvoke(gcnew conditionStopDelegate(this, &Comtex::stopFunction));
 			}
 		}
@@ -518,32 +514,9 @@ namespace ComTex_ALPR {
 
 	private: delegate System::Void delegate_of_gridView();
 	private: System::Void gridView() {
-
-		if (numInt[0] == 0 && numInt[1] == 0 && numInt[2] == 0 && numInt[3] == 0) {
-			return;
-		}
-
-		time_t timer = time(0);
-		struct tm *timeStruct = localtime(&timer);
-		int year = timeStruct->tm_year + 1900;
-		int month = timeStruct->tm_mon + 1;
-		int day = timeStruct->tm_mday;
-		int hour = timeStruct->tm_hour;
-		int minute = timeStruct->tm_min;
-		int second = timeStruct->tm_sec;
-
-		stringstream dateSS, intSS;
-		dateSS << year << "/" << setw(2) << setfill('0') << month << "/" << setw(2) << setfill('0') << day << "," << setw(2) << setfill('0') << hour << ";" << setw(2) << setfill('0') << minute << ":" << setw(2) << setfill('0') << second;
-		string getDate = dateSS.str();
-		System::String^ timeStamp = gcnew System::String(getDate.c_str());
-		intSS << numInt[3] << numInt[2] << numInt[1] << numInt[0];
-		string integerSS = intSS.str();
-		System::String^ numberN = gcnew System::String(integerSS.c_str());
-		cli::array<System::String^>^ rows0 = gcnew cli::array<System::String^>{timeStamp, numberN};
-		DataGridViewRowCollection^ rows = this->dataGridView1->Rows;
-		rows->Add(rows0);
-		if (rows->Count == 30) {
-			rows->RemoveAt(0);
+		processNeuralNetwork(dataGridView1, pictureBox2, pictureBox3);
+		if (dataGridView1->Rows->Count == 30) {
+			dataGridView1->Rows->RemoveAt(0);
 		}
 	}
 
