@@ -1,7 +1,6 @@
 #pragma once
 #include "neuralNetwork.h"
 
-
 namespace ComTex_ALPR {
 
 	using namespace System;
