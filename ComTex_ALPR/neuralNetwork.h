@@ -49,7 +49,7 @@ void dataToDGV(System::Windows::Forms::DataGridView^ dgvName) {
 	timestampRows->Add(arrayTotimestamp());
 }
 
-void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView,System::Windows::Forms::PictureBox^ picbox1,System::Windows::Forms::PictureBox^ picbox2)
+void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView, System::Windows::Forms::PictureBox^ picbox1, System::Windows::Forms::PictureBox^ picbox2)
 {
 	for (int i = 0; i < commPlate.size(); i++)
 	{
@@ -68,15 +68,13 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView,Sys
 		cv::Point pt2(commPlate[i].x, commPlate[i].y);
 		rectangle(image, pt1, pt2, colorNum, 2, 8, 0);
 
-		Mat NumberPlate(original, Rect(pt1, pt2));
-		resize(NumberPlate, resizedNP, cv::Size(200, 100), 1.0, 1.0, INTER_LINEAR);
+		originalNumberPlate = Mat(original, Rect(pt1, pt2));
+
+		//developmentFunction_2(originalNumberPlate);
+
+		resize(originalNumberPlate, resizedNP, cv::Size(200, 100), 1.0, 1.0, INTER_LINEAR);
 		cvtColor(resizedNP, resizedMat, CV_32S);
 		cvtColor(resizedNP, grayNP, CV_BGR2GRAY);
-
-		//	strftime(fname, sizeof(fname), "C:/ImageStorage/commercialNP/commNP_%y%m_%d_%H_%M_%S.png", localtime(&t));
-		//	imwrite(fname, grayNP);
-		//	count++;
-		//	cout << "We got Commercial Number Plate.No." << count << endl;
 
 		Mat binaryNP, cannyNP;
 
@@ -132,8 +130,8 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView,Sys
 				sortArray.push_back(sortA[count]);
 				count++;
 			}
-
 		}
+		if (!sortArray.size() == 0) {
 			sort(sortArray.begin(), sortArray.end(),
 				[](const sort_struct& a, const sort_struct& b) {return a.xLocation > b.xLocation; });
 
@@ -141,13 +139,9 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView,Sys
 				if (i > 3) {
 					break;
 				}
-				//	stringstream nameImgFile;
-				//	nameImgFile << "img/num/left" << i << ".png";
-				//	imwrite(nameImgFile.str(), sortArray[i].numRect);
+
 				stringstream nameMatWindow;
 				nameMatWindow << "num" << i;
-				//	imshow(nameMatWindow.str(), sortArray[i].numRect);
-				//	cout << sortArray[i].xLocation << ",";
 				matrixArray(sortArray[i].numRect, nameMatWindow.str());
 
 				Mat  result;
@@ -158,8 +152,8 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView,Sys
 
 				ifstream ifs;
 				ifs.open(detectNum.str(), ios::in | ios::binary);
-
 				Mat binaryNumMat = Mat(cv::Size(N_INPUT, 1), CV_32F);
+
 
 				for (int y = 0; y < 1; y++) {
 					for (int x = 0; x < N_INPUT; x++) {
@@ -168,7 +162,6 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView,Sys
 
 						ifs.get(moji);
 						number = atoi(&moji);
-						//cout << number;
 
 						if (number == 0) binaryNumMat.at<float>(y, x) = 0.0f;
 						else binaryNumMat.at<float>(y, x) = 1.0f;
@@ -197,7 +190,6 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView,Sys
 			DrawCVImage(picbox1, contoursMat);
 			DrawCVImage(picbox2, concatnated);
 		}
+	}
 }
-
-
 #endif
