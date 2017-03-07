@@ -489,14 +489,12 @@ namespace ComTex_ALPR {
 			DrawCVImage(pictureBox1, matrix32s);
 
 			if (this->alprOn->Checked) {
-				general700_cascade.detectMultiScale(gray, commPlate, 1.3, 5);
 
-				if (!commPlate.empty()) {
 					BeginInvoke(gcnew delegate_of_gridView(this, &Comtex::gridView));
-				}
-			}
-				BeginInvoke(gcnew conditionStopDelegate(this, &Comtex::stopFunction));
 			
+			}
+			BeginInvoke(gcnew conditionStopDelegate(this, &Comtex::stopFunction));
+
 		}
 		BeginInvoke(gcnew delegateOfenableStartButton(this, &Comtex::enableSartButton));
 
