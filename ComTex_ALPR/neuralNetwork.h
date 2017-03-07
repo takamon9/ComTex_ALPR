@@ -51,6 +51,8 @@ void dataToDGV(System::Windows::Forms::DataGridView^ dgvName) {
 
 void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView, System::Windows::Forms::PictureBox^ picbox1, System::Windows::Forms::PictureBox^ picbox2)
 {
+
+	general700_cascade.detectMultiScale(gray, commPlate, 1.3, 5);
 	for (int i = 0; i < commPlate.size(); i++)
 	{
 		numInt[0] = NULL;
@@ -63,14 +65,11 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView, Sy
 		number[2] = 0;
 		number[3] = 0;
 
-		//t = time(NULL);
 		cv::Point pt1(commPlate[i].x + commPlate[i].width, commPlate[i].y + commPlate[i].height);
 		cv::Point pt2(commPlate[i].x, commPlate[i].y);
 		rectangle(image, pt1, pt2, colorNum, 2, 8, 0);
 
 		originalNumberPlate = Mat(original, Rect(pt1, pt2));
-
-		//developmentFunction_2(originalNumberPlate);
 
 		resize(originalNumberPlate, resizedNP, cv::Size(200, 100), 1.0, 1.0, INTER_LINEAR);
 		cvtColor(resizedNP, resizedMat, CV_32S);
@@ -131,6 +130,7 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView, Sy
 				count++;
 			}
 		}
+
 		if (!sortArray.size() == 0) {
 			sort(sortArray.begin(), sortArray.end(),
 				[](const sort_struct& a, const sort_struct& b) {return a.xLocation > b.xLocation; });
@@ -178,22 +178,21 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView, Sy
 				ss << maxLocationResult.x;
 
 				detectedNumber = ss.str();
-				//	detectedNum[i] = maxLocationResult.x;
 				numInt[i] = maxLocationResult.x;
 				number[i] = imread("./img/plate.png");
 
 				putText(number[i], detectedNumber, cv::Point(point4, numHight), CV_FONT_HERSHEY_SIMPLEX, numScale, Scalar(128, 128, 0), numThik, 8);
 			}
-				vector<Mat> number_array{ number[3], number[2], number[1], number[0] };
-				hconcat(number_array, concatnated);
-				dataToDGV(nameGridView);
-				DrawCVImage(picbox1, contoursMat);
-				DrawCVImage(picbox2, concatnated);
-				if (nameGridView->Rows->Count == 50) {
-					nameGridView->Rows->RemoveAt(0);
-				}
+			vector<Mat> number_array{ number[3], number[2], number[1], number[0] };
+			hconcat(number_array, concatnated);
+			dataToDGV(nameGridView);
+			DrawCVImage(picbox1, contoursMat);
+			DrawCVImage(picbox2, concatnated);
+			if (nameGridView->Rows->Count == 50) {
+				nameGridView->Rows->RemoveAt(0);
 			}
 		}
-	
+	}
+
 }
 #endif
