@@ -44,7 +44,7 @@ cli::array<System::String^>^ arrayTotimestamp() {
 	return rows0;
 }
 
-void dataToDGV(System::Windows::Forms::DataGridView^ dgvName) { 
+void dataToDGV(System::Windows::Forms::DataGridView^ dgvName) {
 	DataGridViewRowCollection^ timestampRows = dgvName->Rows;
 	timestampRows->Add(arrayTotimestamp());
 }
@@ -136,8 +136,9 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView, Sy
 				[](const sort_struct& a, const sort_struct& b) {return a.xLocation > b.xLocation; });
 
 			for (int i = 0; i < sortArray.size(); i++) {
+
 				if (i > 3) {
-					break;
+					return;
 				}
 
 				stringstream nameMatWindow;
@@ -183,13 +184,13 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView, Sy
 
 				putText(number[i], detectedNumber, cv::Point(point4, numHight), CV_FONT_HERSHEY_SIMPLEX, numScale, Scalar(128, 128, 0), numThik, 8);
 			}
-
-			vector<Mat> number_array{ number[3], number[2], number[1], number[0] };
-			hconcat(number_array, concatnated);
-			dataToDGV(nameGridView);
-			DrawCVImage(picbox1, contoursMat);
-			DrawCVImage(picbox2, concatnated);
+				vector<Mat> number_array{ number[3], number[2], number[1], number[0] };
+				hconcat(number_array, concatnated);
+				dataToDGV(nameGridView);
+				DrawCVImage(picbox1, contoursMat);
+				DrawCVImage(picbox2, concatnated);
+			}
 		}
-	}
+	
 }
 #endif
