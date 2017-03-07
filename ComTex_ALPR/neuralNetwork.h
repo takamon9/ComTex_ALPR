@@ -189,6 +189,9 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView, Sy
 				dataToDGV(nameGridView);
 				DrawCVImage(picbox1, contoursMat);
 				DrawCVImage(picbox2, concatnated);
+				if (nameGridView->Rows->Count == 50) {
+					nameGridView->Rows->RemoveAt(0);
+				}
 			}
 		}
 	
