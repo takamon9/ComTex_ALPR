@@ -295,6 +295,8 @@ namespace ComTex_ALPR {
 			this->dataGridView1->AutoSizeRowsMode = DataGridViewAutoSizeRowsMode::DisplayedCellsExceptHeaders;
 			this->dataGridView1->MultiSelect = false;
 			this->dataGridView1->ColumnCount = 2;
+			this->dataGridView1->Columns[0]->Width = 150;
+			this->dataGridView1->Columns[1]->Width = 80;
 			this->dataGridView1->Columns[0]->Name = "Date";
 			this->dataGridView1->Columns[1]->Name = "Number";
 			this->dataGridView1->AllowUserToAddRows = true;
@@ -488,18 +490,13 @@ namespace ComTex_ALPR {
 
 			if (this->alprOn->Checked) {
 				general700_cascade.detectMultiScale(gray, commPlate, 1.3, 5);
-				if (general700_cascade.empty()) {
-					MessageBox::Show("No Cascade file detected! Check the data holder.");
-					break;
-				}
-				else {
-					if (!commPlate.empty()) {
-						BeginInvoke(gcnew delegate_of_gridView(this, &Comtex::gridView));
-					}
-				}
 
-				BeginInvoke(gcnew conditionStopDelegate(this, &Comtex::stopFunction));
+				if (!commPlate.empty()) {
+					BeginInvoke(gcnew delegate_of_gridView(this, &Comtex::gridView));
+				}
 			}
+				BeginInvoke(gcnew conditionStopDelegate(this, &Comtex::stopFunction));
+			
 		}
 		BeginInvoke(gcnew delegateOfenableStartButton(this, &Comtex::enableSartButton));
 
@@ -507,16 +504,12 @@ namespace ComTex_ALPR {
 
 	private: delegate System::Void conditionStopDelegate();
 	private: System::Void stopFunction() {
-		this->dataGridView1->AutoResizeColumns(DataGridViewAutoSizeColumnsMode::AllCells);
-
+		//this->dataGridView1->AutoResizeColumns(DataGridViewAutoSizeColumnsMode::AllCells);
 	}
 
 	private: delegate System::Void delegate_of_gridView();
 	private: System::Void gridView() {
 		processNeuralNetwork(dataGridView1, pictureBox2, pictureBox3);
-		if (dataGridView1->Rows->Count == 30) {
-			dataGridView1->Rows->RemoveAt(0);
-		}
 	}
 
 	private: delegate System::Void delegateOfenableStartButton();
