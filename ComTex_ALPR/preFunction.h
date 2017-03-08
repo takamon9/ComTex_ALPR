@@ -1,7 +1,7 @@
-#ifndef __HEADER_H_INCLUDED__
-#define __HEADER_H_INCLUDED__
+#ifndef __PREFUNCTION_H_INCLUDED__
+#define __PREFUNCTION_H_INCLUDED__
 
-#include "neuralNetwork.h"
+#include "programHeader.h"
 
 using namespace System::Windows::Forms;
 
@@ -71,13 +71,12 @@ int accessIpCamera(System::Windows::Forms::DataGridView^ cameraDGV) {
 	}
 }
 
-int accessCascade() {
+void accessCascade() {
 
 	if (!general700_cascade.load("./cascade/700_cascade.xml"))
 	{
 		MessageBox::Show("We failed to load the Cascade! Put the cascade xml file into './dat' holder\n", "Caution", MessageBoxButtons::OK, MessageBoxIcon::Asterisk);
-		system("pause");
-		return -1;
+		return;
 	}
 }
 
@@ -159,7 +158,6 @@ void createNumberArray() {
 }
 
 int readOriginal() {
-	time_t t;
 
 	if (!capture.read(original)) {
 		return -1;
@@ -181,5 +179,7 @@ void DrawCVImage(System::Windows::Forms::Control^ control, cv::Mat& colorImage)
 	graphics->DrawImage(b, rect);
 	delete graphics;
 }
+
+
 
 #endif
