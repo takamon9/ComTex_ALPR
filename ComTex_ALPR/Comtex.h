@@ -463,7 +463,6 @@ namespace ComTex_ALPR {
 
 		System::Windows::Forms::DataGridView^ cameraDataGrid = this->cameraList;
 		accessIpCamera(cameraDataGrid);
-
 		loadNueron();
 
 		if (checkStopKey == 0) {
@@ -488,14 +487,16 @@ namespace ComTex_ALPR {
 			readOriginal();
 			DrawCVImage(pictureBox1, matrix32s);
 
-			if (this->alprOn->Checked) {
+			if (this->alprOn->Checked == true) {
 
 					BeginInvoke(gcnew delegate_of_gridView(this, &Comtex::gridView));
-			
-			}
-			BeginInvoke(gcnew conditionStopDelegate(this, &Comtex::stopFunction));
 
+			}
+			else {
+				BeginInvoke(gcnew conditionStopDelegate(this, &Comtex::stopFunction));
+			}
 		}
+
 		BeginInvoke(gcnew delegateOfenableStartButton(this, &Comtex::enableSartButton));
 
 	}
