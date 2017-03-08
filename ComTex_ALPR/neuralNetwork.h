@@ -131,7 +131,8 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView, Sy
 			}
 		}
 
-		if (!sortArray.size() == 0) {
+		if (!sortArray.empty()) {
+
 			sort(sortArray.begin(), sortArray.end(),
 				[](const sort_struct& a, const sort_struct& b) {return a.xLocation > b.xLocation; });
 
@@ -178,13 +179,16 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView, Sy
 				ss << maxLocationResult.x;
 
 				detectedNumber = ss.str();
+				//	detectedNum[i] = maxLocationResult.x;
 				numInt[i] = maxLocationResult.x;
 				number[i] = imread("./img/plate.png");
 
 				putText(number[i], detectedNumber, cv::Point(point4, numHight), CV_FONT_HERSHEY_SIMPLEX, numScale, Scalar(128, 128, 0), numThik, 8);
 			}
+
 			vector<Mat> number_array{ number[3], number[2], number[1], number[0] };
 			hconcat(number_array, concatnated);
+
 			dataToDGV(nameGridView);
 			DrawCVImage(picbox1, contoursMat);
 			DrawCVImage(picbox2, concatnated);
@@ -193,6 +197,5 @@ void processNeuralNetwork(System::Windows::Forms::DataGridView^ nameGridView, Sy
 			}
 		}
 	}
-
 }
 #endif
