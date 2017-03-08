@@ -37,6 +37,7 @@ int checkStopKey = 0;
 
 Mat neuralMat;
 Mat teacher;
+Mat originalNumberPlate;
 
 vector<Rect> commPlate;
 VideoCapture capture;
@@ -45,9 +46,9 @@ Ptr<ANN_MLP> neuron;
 
 //time_t t;
 
-int size_X = 10;
-int size_Y = 20;
-int N_INPUT = size_X * size_Y;
+const int size_X = 10;
+const int size_Y = 20;
+const int N_INPUT = size_X * size_Y;
 
 string detectedNumber;
 
